@@ -1,0 +1,4 @@
+<view class="container">
+  <text class="yellow-balance">当前余额: {{userBalance}}币</text>
+  <!-- 其他页面内容 -->
+</view> 

@@ -1,0 +1,28 @@
+/* pages/touxiang/touxiang.wxss */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(180deg, #673ab7, #9c27b0);
+}
+
+.large-avatar {
+  width: 80%;
+  height: 80vw; /* 保持正方形 */
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 8rpx 25rpx rgba(0,0,0,0.2);
+}
+
+.large-avatar:active {
+  transform: scale(0.95);
+}
+
+.three-dots {
+  position: absolute;
+  right: 30rpx;
+  top: 30rpx;
+  font-size: 30px; /* 调整字体大小 */
+  color: white; /* 设置颜色 */
+}

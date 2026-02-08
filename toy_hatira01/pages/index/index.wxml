@@ -1,0 +1,190 @@
+<!-- d:\Project_Tools\Tencent\1hunji\new02\pages\index\index.wxml -->
+<view class="container">
+  <!-- 语言选择框 -->
+  <view class="language-selector">
+    <view class="language-box" bindtap="toggleLanguageList">
+      <text>langu</text>
+      <view class="triangle"></view>
+    </view>
+    <view class="language-list" wx:if="{{showLanguageList}}">
+      <view class="language-item" bindtap="changeLanguage" data-lang="ug">ئۇيغۇرچە</view>
+      <view class="language-item" bindtap="changeLanguage" data-lang="zh">中文</view>
+      <view class="language-item" bindtap="changeLanguage" data-lang="en">English</view>
+      <view class="language-item" bindtap="changeLanguage" data-lang="tr">Türkçe dili</view>
+    </view>
+  </view>
+
+  <!-- 音乐选择框 -->
+  <view class="music-selector">
+    <view class="music-box" bindtap="toggleMusicList">
+      <text>{{musicText || i18n[currentLang].music}}</text>
+      <view class="triangle"></view>
+    </view>
+    <!-- 音乐列表下拉框 -->
+    <view class="music-list" wx:if="{{showMusicList}}">
+      <block wx:for="{{musicHistory}}" wx:key="index">
+        <view class="music-item" bindtap="playMusic" data-index="{{index}}">
+          {{item.name}}
+        </view>
+      </block>
+      <view class="music-item select-new" bindtap="selectNewMusic">
+        {{selectMusicText || i18n[currentLang].selectMusic}}
+      </view>
+    </view>
+  </view>
+
+  <view class="me-circle" bindtap="handleMeCircleClick">me
+    <view class="my-keys" wx:if="{{showMyKeys}}">
+      <!-- 消息通知 -->
+      <view class="my-Msg-circle {{!myMsgVisible ? 'hide' : 'show'}}" data-key="myMsg" bindtap="navigateToMsgPage">
+        Mgs
+        <block wx:if="{{myMsgVisible && myMsgBadge > 0}}">
+          <view class="msg-badge">{{myMsgBadge}}</view>
+        </block>
+      </view>
+      <!-- 余额通知 -->
+      <view class="my-userBalance-circle {{!myBalanceVisible ? 'hide' : 'show'}}" data-key="myBalance" bindtap="navigateTouserBalancePage">
+        余额
+        <block wx:if="{{myBalanceVisible && myBalanceBadge > 0}}">
+          <view class="userBalance-badge">{{myBalanceBadge}}</view>
+        </block>
+      </view>
+      <!-- 设置通知 -->
+      <view class="my-Setup-circle {{!mysettingVisible ? 'hide' : 'show'}}" data-key="mysetting" bindtap="navigateToSettingsPage">me1</view>
+    </view>
+  </view>
+    <!-- 找到 myMsg 对应的DOM结构 -->
+  <view class="my-key {{myMsgVisible ? 'visible' : ''}}" bindtap="navigateToMsgPage" data-key="myMsg">   
+    <!-- 新增消息通知红点 -->
+    <block wx:if="{{myMsgVisible && myMsgBadge > 0}}">
+      <view class="msg-badge">{{myMsgBadge}}</view>
+    </block>
+  </view>
+
+  
+
+  <!-- A左礼物展示区域 -->
+  <view class="a-left-gift-area" wx:if="{{leftGiftVisible}}" style="transform: {{isGifting ? 'translateX(-100%)' : 'translateX(0)'}}">
+    <block wx:for="{{leftGiftAnimations}}" wx:key="id">
+      <image class="gift-animation" src="{{item.image}}" mode="aspectFit"></image>
+    </block>
+  </view>
+  <!-- A照片区域 -->
+  <view class="a-photo-area">
+    <block wx:for="{{images}}" wx:key="index">
+      <image src="{{item.src}}" style="position: absolute; top: {{item.top}}; width: 100%; height: 100%; object-fit: cover;opacity: {{currentIndex === index ? 1 : 0}};transition: opacity 0.3s ease-in-out;"></image>
+    </block>
+
+    <view class="add-image-a" wx:if="{{showAddImage}}" bindtap="chooseAImage">+</view>
+
+    <!-- 添加小圆点 -->
+    <view class="dots">
+      <block wx:for="{{images}}" wx:key="index">
+        <view class="dot {{ currentIndex === index ? 'current-dot-line' : 'current-dot' }}" data-index="{{index}}" bindtap="handleDotClick"></view>
+      </block>
+    </view>  
+  </view>
+
+  
+  <!-- A右礼物展示区域 -->
+  <view class="a-right-gift-area" wx:if="{{rightGiftVisible}}" style="transform: {{isGifting ? 'translateX(100%)' : 'translateX(0)'}}">
+    <block wx:for="{{rightGiftAnimations}}" wx:key="id">
+      <image class="gift-animation" src="{{item.image}}" mode="aspectFit"></image>
+    </block>
+  </view>
+
+  <!-- 添加上传图片区域 -->
+  <view class="b-photo-area">
+    <block wx:for="{{bImages}}" wx:key="*this">
+      <image src="{{item}}" mode="aspectFill" class="uploaded-image" data-index="{{index}}" bindtouchstart="onImageTouchStart" bindtouchmove="onImageTouchMove" bindtouchend="onImageTouchEnd" style="z-index: {{index === restoringIndex ? 10 : (index === currentBIndex ? 7 : (index === (currentBIndex + 1) % bImages.length ? 6 : (index === (currentBIndex + 2) % bImages.length ? 5 : 1)))}}; height: {{index === restoringIndex ? 340 : (index === currentBIndex ? 340 : (index === (currentBIndex + 1) % bImages.length ? 370 : 400))}}px; opacity: {{index === draggingIndex ? opacity : (index === restoringIndex ? restoringOpacity : 1)}}; transform: translate({{index === currentBIndex ? translateX : (index === restoringIndex ? restoringTranslateX : 0)}}px, {{index === currentBIndex ? translateY : (index === restoringIndex ? restoringTranslateY : 0)}}px); transition: {{index === currentBIndex ? 'transform 0.3s ease-out, opacity 0.3s ease-out' : (index === restoringIndex ? (disableRestoringTransition ? 'none' : 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease-out') : 'none')}};"></image>
+    </block>
+    <view class="add-image-b" wx:if="{{showAddBImage}}" bindtap="chooseBImage">+</view>
+  </view>
+  
+  <!-- 直接显示提示文字 -->
+  <view wx:if="{{showFirstImageMessage}}" style="position: fixed;z-index: 9; top: 60%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 16px;">这是第一张图片</view>
+
+
+  <!-- 左侧礼物列表 -->
+  <scroll-view 
+    class="b-left-gift-area" 
+    scroll-y 
+    bindscroll="handleLeftScroll" wx:if="{{leftGiftVisible}}" style="transform: {{isGifting ? 'translateX(-100%)' : 'translateX(0)'}}"
+  >
+    <block wx:for="{{leftGifts}}" wx:key="id">
+      <view 
+        class="gift-item {{item.selected ? 'selected' : ''}}" 
+        bindtap="onSelectLeftGift" 
+        data-id="{{item.id}}"
+      >
+        <image src="{{item.image}}" mode="aspectFit"></image>       
+        <text>{{item.name}}</text>
+      </view>
+    </block>
+  </scroll-view>
+
+  <!-- 左侧发送按钮 -->
+  <view 
+    class="b-l-send-rectangle left-send-button {{isLeftSendActive ? 'active' : ''}}" 
+    bindtap="onSendLeftGift" wx:if="{{leftGiftVisible}}" style="transform: {{isGifting ? 'translateX(-100%)' : 'translateX(0)'}}"
+  >
+    发送
+  </view>
+
+  <!-- 左侧展示价格区域 -->
+  <view class="b-l-show-price-rectangle {{selectedLeftGift ? 'expanded' : ''}}" wx:if="{{leftGiftVisible}}" style="transform: {{isGifting ? 'translateX(-100%)' : 'translateX(0)'}}">
+    <text wx:if="{{selectedLeftGift}}">{{selectedLeftGift.price}}币</text>    
+  </view>
+
+  <!-- 右侧礼物列表 -->
+  <scroll-view 
+    class="b-right-gift-area" 
+    scroll-y 
+    bindscroll="handleRightScroll" wx:if="{{rightGiftVisible}}" style="transform: {{isGifting ? 'translateX(100%)' : 'translateX(0)'}}"
+  >
+    <block wx:for="{{rightGifts}}" wx:key="id">
+      <view 
+        class="gift-item {{item.selected ? 'selected' : ''}}" 
+        bindtap="onSelectRightGift" 
+        data-id="{{item.id}}"
+      >
+        <image src="{{item.image}}" mode="aspectFit"></image>        
+        <!-- <text>{{item.price}}币</text> --> 
+        <text>{{item.name}}</text>
+      </view>
+    </block>
+  </scroll-view>
+
+  <!-- 右侧发送按钮 -->
+  <view 
+    class="b-r-send-rectangle right-send-button {{isRightSendActive ? 'active' : ''}}" 
+    bindtap="onSendRightGift" wx:if="{{rightGiftVisible}}" style="transform: {{isGifting ? 'translateX(100%)' : 'translateX(0)'}}"
+  >
+    发送
+  </view>
+
+  <!-- 右侧展示价格区域 -->
+  <view class="b-r-show-price-rectangle {{selectedRightGift ? 'expanded' : ''}}" wx:if="{{rightGiftVisible}}" style="transform: {{isGifting ? 'translateX(100%)' : 'translateX(0)'}}">
+    <text wx:if="{{selectedRightGift}}">{{selectedRightGift.price}}币</text>
+  </view>
+
+  <!-- 修改footer结构并添加触摸事件 -->
+  <view class="footer" 
+      bindtouchstart="handleTouchStart"
+      bindtouchmove="handleTouchMove"
+      style="transform: translateY({{footerTranslate}}px)">
+    <view class="preview-button">预览</view>
+    <view class="gift-button" bindtap="handleGiftClick">礼物</view>
+  </view>
+
+
+  <view class="last-key-circle" data-key="last" bindtap="handleKeyClick">↺</view>
+  <view class="func-keys" wx:if="{{showFuncKeys}}">
+    <view class="dele-key-circle {{!deleVisible ? 'hide' : ''}} {{deleVisible ? 'show' : ''}}" data-key="dele" bindtap="handleKeyClick">╳</view>
+    <view class="b0-key-circle {{!b0Visible ? 'hide' : ''}} {{b0Visible ? 'show' : ''}}" data-key="b0" bindtap="handleKeyClick">♡</view>
+    <view class="b1-key-circle {{!b1Visible ? 'hide' : ''}} {{b1Visible ? 'show' : ''}}" data-key="b1" bindtap="handleKeyClick">↓</view>
+    <view class="add-key-circle {{!addVisible ? 'hide' : ''}} {{addVisible ? 'show' : ''}}" data-key="add" bindtap="handleKeyClick">+</view>
+  </view>
+  <view class="func-key-circle" data-key="func" bindtap="handleKeyClick">○</view>
+  
+</view>

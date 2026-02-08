@@ -1,0 +1,29 @@
+<view class="container">
+  <!-- 修改用户信息头部分 -->
+  <view class="user-header" bindtap="onAvatarTap">
+    <image class="avatar" src="{{userInfo.avatar}}" mode="aspectFill"/>
+    <view class="user-info">
+      <text class="nickname">{{userInfo.nickname}}</text>
+      <text class="uid">ID: {{userInfo.uid}}</text>
+    </view>
+  </view>
+
+  <!-- 设置列表 -->
+  <view class="settings-list">
+    <view class="list-title">账号设置</view>
+    <view class="item" wx:for="{{accountSettings}}" wx:key="index" bindtap="{{item.event}}">
+      <image class="item-icon" src="{{item.icon}}"/>
+      <text>{{item.title}}</text>
+    </view>
+
+    <view class="list-title">通知设置</view>
+    <view class="item" wx:for="{{notifySettings}}" wx:key="index">
+      <image class="item-icon" src="{{item.icon}}"/>
+      <text>{{item.title}}</text>
+      <switch class="switch" checked="{{item.enabled}}" bindchange="toggleNotify" data-type="{{item.type}}"/>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-btn" bindtap="showLogoutConfirm">退出登录</view>
+</view>

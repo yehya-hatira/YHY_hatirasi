@@ -1,0 +1,72 @@
+<!--pages/Record/Record.wxml-->
+<view class="container">
+  <!-- 语言选择框 -->
+  <view class="language-selector">
+    <view class="language-box" bindtap="toggleLanguageList">
+      <text>langu</text>
+      <view class="triangle"></view>
+    </view>
+    <view class="language-list" wx:if="{{showLanguageList}}">
+      <view class="language-item" bindtap="changeLanguage" data-lang="ug">ئۇيغۇرچە</view>
+      <view class="language-item" bindtap="changeLanguage" data-lang="zh">中文</view>
+      <view class="language-item" bindtap="changeLanguage" data-lang="en">English</view>
+      <view class="language-item" bindtap="changeLanguage" data-lang="tr">Türkçe dili</view>
+    </view>
+  </view>
+
+  <!-- 音乐选择框 -->
+  <view class="music-selector">
+    <view class="music-box" bindtap="toggleMusicList">
+      <text>{{musicText || i18n[currentLang].music}}</text>
+      <view class="triangle"></view>
+    </view>
+    <!-- 音乐列表下拉框 -->
+    <view class="music-list" wx:if="{{showMusicList}}">
+      <block wx:for="{{musicHistory}}" wx:key="index">
+        <view class="music-item" bindtap="playMusic" data-index="{{index}}">
+          {{item.name}}
+        </view>
+      </block>
+      <view class="music-item select-new" bindtap="selectNewMusic">
+        {{selectMusicText || i18n[currentLang].selectMusic}}
+      </view>
+    </view>
+  </view>
+
+  <!-- A照片区域 -->
+  <view class="a-photo-area">
+    <block wx:for="{{images}}" wx:key="index">
+      <image src="{{item.src}}" style="position: absolute; top: {{item.top}}; width: 100%; height: 100%; object-fit: cover;opacity: {{currentIndex === index ? 1 : 0}};transition: opacity 0.3s ease-in-out;"></image>
+    </block>
+
+    <view class="add-image-a" wx:if="{{showAddImage}}" bindtap="chooseAImage">+</view>
+
+    <!-- 添加小圆点 -->
+    <view class="dots">
+      <block wx:for="{{images}}" wx:key="index">
+        <view class="dot {{ currentIndex === index ? 'current-dot-line' : 'current-dot' }}" data-index="{{index}}" bindtap="handleDotClick"></view>
+      </block>
+    </view>  
+  </view>
+
+  <!-- 添加上传图片区域 -->
+  <view class="b-photo-area">
+    <block wx:for="{{bImages}}" wx:key="*this">
+      <image src="{{item}}" mode="aspectFill" class="uploaded-image" data-index="{{index}}" bindtouchstart="onImageTouchStart" bindtouchmove="onImageTouchMove" bindtouchend="onImageTouchEnd" style="z-index: {{index === currentBIndex ? 7 : (index === (currentBIndex + 1) % bImages.length ? 6 : (index === (currentBIndex + 2) % bImages.length ? 5 : 1))}}; height: {{index === currentBIndex ? 340 : (index === (currentBIndex + 1) % bImages.length ? 370 : 400)}}px; opacity: {{index === draggingIndex ? opacity : 1}}; transform: translate({{index === currentBIndex ? translateX : 0}}px, {{index === currentBIndex ? translateY : 0}}px); transition: {{index === currentBIndex ? 'transform 0.3s ease-out, opacity 0.3s ease-out' : 'none'}};"></image>
+    </block>
+    <view class="add-image-b" wx:if="{{showAddBImage}}" bindtap="chooseBImage">+</view>
+  </view>
+  
+  <!-- 直接显示提示文字 -->
+  <view wx:if="{{showFirstImageMessage}}" style="position: fixed; top: 60%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 16px;">这是第一张图片</view>
+
+  <view class="last-key-circle" data-key="last" bindtap="handleKeyClick">↺</view>
+  <view class="func-keys" wx:if="{{showFuncKeys}}">
+    <view class="dele-key-circle {{!deleVisible ? 'hide' : ''}} {{deleVisible ? 'show' : ''}}" data-key="dele" bindtap="handleKeyClick">╳</view>
+    <view class="b0-key-circle {{!b0Visible ? 'hide' : ''}} {{b0Visible ? 'show' : ''}}" data-key="b0" bindtap="handleKeyClick">♡</view>
+    <view class="b1-key-circle {{!b1Visible ? 'hide' : ''}} {{b1Visible ? 'show' : ''}}" data-key="b1" bindtap="handleKeyClick">↓</view>
+    <view class="add-key-circle {{!addVisible ? 'hide' : ''}} {{addVisible ? 'show' : ''}}" data-key="add" bindtap="handleKeyClick">+</view>
+  </view>
+  <view class="func-key-circle" data-key="func" bindtap="handleKeyClick">○</view>
+  
+</view>

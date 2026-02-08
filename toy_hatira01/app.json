@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/message/message",
+    "pages/Balance/balance",
+    "pages/touxiang/touxiang",
+    "pages/settings/settings",
+    "pages/Record/Record",
+    "pages/Historical-record/hist-record"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#673ab7",
+    "navigationBarTitleText": "瞎记",
+    "navigationBarTextStyle": "white"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "supportedLanguages": ["zh-CN", "en-US"],
+  "lazyCodeLoading": "requiredComponents",
+  "navigateToMiniProgramAppIdList": ["wx8dd6ecd81906fd84"],
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
+  },
+  "permission": {
+    "scope": {
+      "camera": {
+        "desc": "需要使用相机拍照"
+      },
+      "album": {
+        "desc": "需要访问相册选择图片"
+      }
+    }
+  }
+}

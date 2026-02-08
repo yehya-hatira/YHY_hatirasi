@@ -1,0 +1,132 @@
+/* 继承原有风格并扩展 */
+
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #673ab7, #9c27b0);
+  overflow: hidden; /* 禁用滚动 */
+}
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  padding: 1rpx;
+  overflow: hidden; /* 禁用滚动 */
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background: white;
+  border-radius: 16rpx;
+  margin-bottom: 30rpx;
+  width: 100%;
+}
+
+.avatar {
+  transition: transform 0.3s ease;
+}
+
+.avatar:active {
+  transform: scale(0.95);
+}
+
+/**/
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/**/
+.nickname {
+  font-size: 36rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+/**/
+.uid {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/**/
+.settings-list {
+  background: white;
+  border-radius: 16rpx;
+  padding: 0 30rpx;
+  width: 100%;
+}
+
+/**/
+.list-title {
+  color: #999;
+  font-size: 26rpx;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #eee;
+  width: 100%;
+}
+
+/**/
+.item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+/**/
+.item-icon {
+  width: 5rpx;
+  height: 5rpx;
+  margin-right: 20rpx;
+}
+
+/**/
+.item-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+/**/
+.value {
+  color: #999;
+  margin-right: 20rpx;
+}
+
+/* 箭头 */
+.arrow {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+/*开关*/
+.switch {
+  transform: scale(0.8);
+  margin-left: auto;
+}
+
+/* 退出登录 */
+.logout-btn {
+  margin: 100rpx auto;
+  width: 60%;
+  text-align: center;
+  color: #ff4444;
+  padding: 30rpx;
+  background: white;
+  border-radius: 16rpx;
+}

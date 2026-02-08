@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
+  },
+  "pages": [
+    "pages/index/index",
+    "pages/message/message",
+    "pages/settings/settings",
+    "pages/Balance/balance"
+  ]
+}

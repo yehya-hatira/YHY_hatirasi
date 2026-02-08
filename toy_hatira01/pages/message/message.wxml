@@ -1,0 +1,16 @@
+<view>  
+  <!-- 显示通知 -->
+  <view class="notifications">
+    <block wx:for="{{notifications}}" wx:key="index">
+      <view class="notification-item">
+        <view class="timestamp">{{item.timestamp}}</view>
+        {{item.sender}} 给 {{item.receiver}} 送了 {{item.giftName}}
+      </view>
+    </block>
+  </view>
+  
+  <!-- 显示未读消息计数 -->
+  <view class="msg-badge">{{myMsgBadge}}</view>
+  
+  <!-- 其他页面内容 -->
+</view> 

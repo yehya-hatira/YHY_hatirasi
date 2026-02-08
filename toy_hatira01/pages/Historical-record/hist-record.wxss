@@ -1,0 +1,24 @@
+/* pages/Historical-record/hist-record.wxss */
+.page {
+  /*height: 100vh;
+   display: flex;
+   flex-direction: column;*/
+   width: 100%;
+   height: 100%;
+   margin: 0;
+   padding: 0;
+   background: #f0f0f0;
+ }
+ 
+ .scrollarea {
+   flex: 1;
+   overflow-y: auto;
+   height: 100vh;
+ }
+ 
+ .container {
+   width: 100%;
+   height: 100vh;
+   position: relative;
+   background: linear-gradient(180deg, #673ab7, #9c27b0);
+ }
