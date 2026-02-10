@@ -1,40 +1,115 @@
 /* d:\Project_Tools\Tencent\1hunji\me\pages\message\message.wxss */
-.view {
-  padding: 0;
-} 
-
-
-.notifications {
-  margin-top: 10px; /**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #673ab7, #9c27b0);
+  overflow: hidden; /* 禁用页面滚动 */
 }
 
-.notification-item {
-  padding: 20px;
-  border-bottom: 2px solid #FFFFFF;/*ED82EB*/
-  color: #333;
-  position: relative; /**/
+.container {
+  flex: 1;
+  padding: 40rpx 30rpx 30rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* 禁用容器滚动 */
 }
 
-.notification-item .timestamp {
-  position: absolute; /**/
-  top: -10px; /**/
-  left: 170px; /**/
-  font-size: 12px; /**/
-  color: #999; /**/
+.msg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+  position: relative;
+  z-index: 10; /* 确保标题在最上层 */
+  background: linear-gradient(180deg, #673ab7, rgba(103, 58, 183, 0.95));
+  padding-bottom: 20rpx;
+}
+
+.msg-title {
+  font-size: 34rpx;
+  color: #ffffff;
+  font-weight: 500;
 }
 
 .msg-badge {
-    position: absolute;
-    top: 10px; /**/
-    right: 10px; /**/
-    background-color: red;
-    color: white;
-    border-radius: 50%;
-    padding: 5px;
-    font-size: 12px;
-    display: none; /**/
+  min-width: 40rpx;
+  padding: 4rpx 12rpx;
+  background-color: #ff5252;
+  color: #ffffff;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  text-align: center;
 }
 
-.my-Msg-circle.show .msg-badge {
-    display: block; /**/
+/* 滚动容器 */
+.notifications-scroll {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+/* 隐藏滚动条 */
+.notifications-scroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+.notifications {
+  display: flex;
+  flex-direction: column-reverse;
+  padding-bottom: 20rpx;
+}
+
+.notification-item {
+  margin-bottom: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.notification-text {
+  font-size: 28rpx;
+  color: #000000;
+  margin-top: 10rpx;
+}
+
+.timestamp {
+  font-size: 28rpx;
+  color: #000000;
+}
+
+.empty-state {
+  margin-top: 160rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color:rgb(245, 245, 245);
+}
+
+.empty-icon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 54rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-title {
+  font-size: 30rpx;
+  margin-bottom: 8rpx;
+}
+
+.empty-subtitle {
+  font-size: 24rpx;
+  opacity: 0.85;
 }

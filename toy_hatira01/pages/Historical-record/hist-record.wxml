@@ -1,4 +1,8 @@
 <!--pages/Historical-record/hist-record.wxml-->
 <view class="container">
-  <text>(●ˇ∀ˇ●)敬请等待更新...</text>
+  <view class="empty-state">
+    <view class="empty-icon">⌛</view>
+    <text class="empty-title">历史记录暂时为空</text>
+    <text class="empty-subtitle">当你有更多礼物记录时，会展示在这里</text>
+  </view>
 </view>

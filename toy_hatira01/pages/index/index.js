@@ -58,7 +58,15 @@ Page({
         confirmDelete: 'راستىنلا ئۆچۈرەمسىز؟',
         success: 'مۇۋەپپەقىيەتلىك',
         fail: 'مەغلۇپ بولدى',
-        language: 'تىل'
+        language: 'تىل',
+        me: 'مەن',
+        messages: 'ئۇچۇرلار',
+        balance: 'پۇل قالدۇقى',
+        settings: 'تەڭشەك',
+        send: 'ئەۋەەت',
+        preview: 'كۆرۈش',
+        gift: 'سوۋغا',
+        firstImageTip: 'بۇ بىرىنچى سۈرەت'
       },
       zh: {
         title: '瞎记',
@@ -68,7 +76,15 @@ Page({
         confirmDelete: '确定要删除吗？',
         success: '成功',
         fail: '失败',
-        language: '语言'
+        language: '语言',
+        me: '我',
+        messages: '消息',
+        balance: '余额',
+        settings: '设置',
+        send: '发送',
+        preview: '预览',
+        gift: '礼物',
+        firstImageTip: '这是第一张图片'
       },
       en: {
         title: 'Notes',
@@ -78,7 +94,15 @@ Page({
         confirmDelete: 'Confirm to delete?',
         success: 'Success',
         fail: 'Failed',
-        language: 'Language'
+        language: 'Language',
+        me: 'Me',
+        messages: 'Messages',
+        balance: 'Balance',
+        settings: 'Settings',
+        send: 'Send',
+        preview: 'Preview',
+        gift: 'Gift',
+        firstImageTip: 'This is the first photo'
       },
       tr: {
         title: 'Notlar',
@@ -88,7 +112,15 @@ Page({
         confirmDelete: 'Silmeyi onayla?',
         success: 'Başarılı',
         fail: 'Başarısız',
-        language: 'Dil'
+        language: 'Dil',
+        me: 'Ben',
+        messages: 'Mesajlar',
+        balance: 'Bakiye',
+        settings: 'Ayarlar',
+        send: 'Gönder',
+        preview: 'Önizleme',
+        gift: 'Hediye',
+        firstImageTip: 'Bu ilk fotoğraf'
       }
     },
       // 礼物列表
@@ -150,6 +182,13 @@ Page({
   toggleLanguageList: function() {
     this.setData({
       showLanguageList: !this.data.showLanguageList
+    });
+  },
+  // 关闭所有下拉列表（点击遮罩或空白区域）
+  closeDropdowns: function() {
+    this.setData({
+      showLanguageList: false,
+      showMusicList: false
     });
   },
   // 切换语言
@@ -457,14 +496,20 @@ Page({
   },
 
 
-  // 获取用户余额
+  // 获取用户余额（与全局 / 本地存储同步）
   getUserBalance: function() {
     console.log('获取用户余额...');
-    // 模拟API请求获取用户余额
-    setTimeout(() => {
-      this.setData({ userBalance: 100 });
-      console.log('当前用户余额:', this.data.userBalance); // 打印用户余额
-    }, 500);
+    const app = getApp();
+    const savedBalance = wx.getStorageSync('userBalance');
+    let balance = 100;
+    if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
+      balance = savedBalance;
+    } else if (typeof app.globalData.userBalance === 'number') {
+      balance = app.globalData.userBalance;
+    }
+    this.setData({ userBalance: balance });
+    app.globalData.userBalance = balance;
+    console.log('当前用户余额:', this.data.userBalance);
   },
 
   // 获取礼物记录
@@ -567,9 +612,18 @@ Page({
 
   // 左侧发送礼物事件
   onSendLeftGift() {
-    this.setData({ isLeftSendActive: true }); // 激活左侧发送按钮
     const selectedGift = this.data.selectedLeftGift;
     if (selectedGift) {
+      // 余额不足校验
+      if (this.data.userBalance < selectedGift.price) {
+        wx.showToast({
+          title: '余额不足，请先充值',
+          icon: 'none'
+        });
+        return;
+      }
+
+      this.setData({ isLeftSendActive: true }); // 激活左侧发送按钮
       // 模拟发送礼物
       console.log('发送左侧礼物:', selectedGift.name);
       this.sendGiftNotification('用户B', this.data.currentReceiver, selectedGift.name);
@@ -595,6 +649,15 @@ Page({
 
     const selectedGift = this.data.selectedRightGift;
     if (selectedGift) {
+      // 余额不足校验
+      if (this.data.userBalance < selectedGift.price) {
+        wx.showToast({
+          title: '余额不足，请先充值',
+          icon: 'none'
+        });
+        return;
+      }
+
       // 模拟发送礼物
       console.log('发送右侧礼物:', selectedGift.name);
         this.sendGiftNotification('用户B', this.data.currentReceiver, selectedGift.name);
@@ -619,6 +682,8 @@ Page({
     this.setData({
         myMsgBadge: app.globalData.unreadMsgCount || 0 // 显示未读消息计数
     });
+    // 每次返回主页时同步最新余额
+    this.getUserBalance();
   },
 
 
@@ -632,6 +697,9 @@ Page({
         _this.updateUserBalance(-gift.price);
         // 添加礼物记录
         _this.addGiftRecord(gift);
+
+        // 记录消费流水
+        _this.addBalanceRecord('consume', -gift.price, `送出 ${gift.name}`);
         
         // 播放动画，确保根据状态播放动画
         if (_this.data.isLeftSendActive) {
@@ -700,13 +768,35 @@ Page({
     }, 500);
   },
 
-  // 更新用户余额
+  // 更新用户余额（与全局 / 本地存储同步）
   updateUserBalance: function(amount) {
+    const app = getApp();
+    const newBalance = this.data.userBalance + amount;
     this.setData({ 
-      userBalance: this.data.userBalance + amount,
+      userBalance: newBalance,
       myBalanceBadge: this.data.myBalanceBadge + 1 
     });
+    app.globalData.userBalance = newBalance;
+    wx.setStorageSync('userBalance', newBalance);
     console.log('更新后用户余额:', this.data.userBalance); // 打印更新后的余额
+  },
+
+  // 记录余额流水（消费）
+  addBalanceRecord: function(type, amount, remark) {
+    const app = getApp();
+    const now = new Date();
+    const record = {
+      type, // 'recharge' | 'consume'
+      amount,
+      balanceAfter: this.data.userBalance,
+      remark: remark || '',
+      timestamp: now.toISOString()
+    };
+
+    const existing = wx.getStorageSync('balanceRecords') || [];
+    const updated = [...existing, record];
+    wx.setStorageSync('balanceRecords', updated);
+    app.globalData.balanceRecords = updated;
   },
 
   // 添加礼物记录

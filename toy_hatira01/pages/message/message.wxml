@@ -1,16 +1,32 @@
-<view>  
-  <!-- 显示通知 -->
-  <view class="notifications">
-    <block wx:for="{{notifications}}" wx:key="index">
-      <view class="notification-item">
-        <view class="timestamp">{{item.timestamp}}</view>
-        {{item.sender}} 给 {{item.receiver}} 送了 {{item.giftName}}
-      </view>
-    </block>
+<view class="container">  
+  <!-- 头部标题 - 固定在顶部 -->
+  <view class="msg-header">
+    <text class="msg-title">礼物消息</text>
+    <view class="msg-badge" wx:if="{{myMsgBadge > 0}}">{{myMsgBadge}}</view>
   </view>
-  
-  <!-- 显示未读消息计数 -->
-  <view class="msg-badge">{{myMsgBadge}}</view>
-  
-  <!-- 其他页面内容 -->
+
+  <!-- 有消息时的列表 - 使用scroll-view实现滚动 -->
+  <block wx:if="{{notifications.length}}">
+    <scroll-view class="notifications-scroll" scroll-y="true">
+      <view class="notifications">
+        <block wx:for="{{notifications}}" wx:key="index">
+          <view class="notification-item">
+            <text class="notification-text">
+              {{item.sender}} 给{{item.receiver}} 送了 {{item.giftName}}
+            </text>
+            <text class="timestamp">{{item.timestamp}}</text>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+  </block>
+
+  <!-- 无消息时的空状态 -->
+  <block wx:else>
+    <view class="empty-state">
+      <view class="empty-icon">∿</view>
+      <text class="empty-title">还没有收到礼物</text>
+      <text class="empty-subtitle">当有人给你送礼物时，会出现在这里</text>
+    </view>
+  </block>
 </view> 

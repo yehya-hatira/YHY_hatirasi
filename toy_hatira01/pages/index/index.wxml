@@ -3,7 +3,7 @@
   <!-- 语言选择框 -->
   <view class="language-selector">
     <view class="language-box" bindtap="toggleLanguageList">
-      <text>langu</text>
+      <text class="text">{{i18n[currentLang].language}}</text>
       <view class="triangle"></view>
     </view>
     <view class="language-list" wx:if="{{showLanguageList}}">
@@ -17,7 +17,7 @@
   <!-- 音乐选择框 -->
   <view class="music-selector">
     <view class="music-box" bindtap="toggleMusicList">
-      <text>{{musicText || i18n[currentLang].music}}</text>
+      <text class="text">{{musicText || i18n[currentLang].music}}</text>
       <view class="triangle"></view>
     </view>
     <!-- 音乐列表下拉框 -->
@@ -33,24 +33,33 @@
     </view>
   </view>
 
-  <view class="me-circle" bindtap="handleMeCircleClick">me
+  <!-- 下拉遮罩：点击空白区域收起语言/音乐列表 -->
+  <view 
+    class="dropdown-mask" 
+    wx:if="{{showLanguageList || showMusicList}}" 
+    bindtap="closeDropdowns"
+  ></view>
+
+  <view class="me-circle" bindtap="handleMeCircleClick">{{i18n[currentLang].me}}
     <view class="my-keys" wx:if="{{showMyKeys}}">
       <!-- 消息通知 -->
       <view class="my-Msg-circle {{!myMsgVisible ? 'hide' : 'show'}}" data-key="myMsg" bindtap="navigateToMsgPage">
-        Mgs
+        {{i18n[currentLang].messages}}
         <block wx:if="{{myMsgVisible && myMsgBadge > 0}}">
           <view class="msg-badge">{{myMsgBadge}}</view>
         </block>
       </view>
       <!-- 余额通知 -->
       <view class="my-userBalance-circle {{!myBalanceVisible ? 'hide' : 'show'}}" data-key="myBalance" bindtap="navigateTouserBalancePage">
-        余额
+        {{i18n[currentLang].balance}}
         <block wx:if="{{myBalanceVisible && myBalanceBadge > 0}}">
           <view class="userBalance-badge">{{myBalanceBadge}}</view>
         </block>
       </view>
       <!-- 设置通知 -->
-      <view class="my-Setup-circle {{!mysettingVisible ? 'hide' : 'show'}}" data-key="mysetting" bindtap="navigateToSettingsPage">me1</view>
+      <view class="my-Setup-circle {{!mysettingVisible ? 'hide' : 'show'}}" data-key="mysetting" bindtap="navigateToSettingsPage">
+        {{i18n[currentLang].settings}}
+      </view>
     </view>
   </view>
     <!-- 找到 myMsg 对应的DOM结构 -->
@@ -102,7 +111,9 @@
   </view>
   
   <!-- 直接显示提示文字 -->
-  <view wx:if="{{showFirstImageMessage}}" style="position: fixed;z-index: 9; top: 60%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 16px;">这是第一张图片</view>
+  <view wx:if="{{showFirstImageMessage}}" style="position: fixed;z-index: 9; top: 60%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 16px;">
+    {{i18n[currentLang].firstImageTip}}
+  </view>
 
 
   <!-- 左侧礼物列表 -->
@@ -128,7 +139,7 @@
     class="b-l-send-rectangle left-send-button {{isLeftSendActive ? 'active' : ''}}" 
     bindtap="onSendLeftGift" wx:if="{{leftGiftVisible}}" style="transform: {{isGifting ? 'translateX(-100%)' : 'translateX(0)'}}"
   >
-    发送
+    {{i18n[currentLang].send}}
   </view>
 
   <!-- 左侧展示价格区域 -->
@@ -160,7 +171,7 @@
     class="b-r-send-rectangle right-send-button {{isRightSendActive ? 'active' : ''}}" 
     bindtap="onSendRightGift" wx:if="{{rightGiftVisible}}" style="transform: {{isGifting ? 'translateX(100%)' : 'translateX(0)'}}"
   >
-    发送
+    {{i18n[currentLang].send}}
   </view>
 
   <!-- 右侧展示价格区域 -->
@@ -173,8 +184,8 @@
       bindtouchstart="handleTouchStart"
       bindtouchmove="handleTouchMove"
       style="transform: translateY({{footerTranslate}}px)">
-    <view class="preview-button">预览</view>
-    <view class="gift-button" bindtap="handleGiftClick">礼物</view>
+    <view class="preview-button">{{i18n[currentLang].preview}}</view>
+    <view class="gift-button" bindtap="handleGiftClick">{{i18n[currentLang].gift}}</view>
   </view>
 
 

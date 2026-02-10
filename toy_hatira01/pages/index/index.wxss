@@ -138,6 +138,17 @@ page {
 .language-item:hover {
   background: #f5f5f5;
 }
+
+/* 语言/音乐下拉遮罩，点击空白可关闭下拉框 */
+.dropdown-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.05);
+  z-index: 3;
+}
 .me-circle {
   position: absolute;
   left: 180px;

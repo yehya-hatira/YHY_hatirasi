@@ -16,15 +16,156 @@ page {
   height: 100vh;
   position: relative;
   overflow: hidden; /* 禁用滚动 */
-  /*background: #f0f0f0;*/
-  /*background: linear-gradient(180deg, #673ab7, #9c27b0);*/ /*深紫色渐变背景 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
 }
 
-.yellow-balance {
-  width: 200px;
-  height: 80px;
-  background-color: #FFEB3B;
-  border-radius: 5px;
+/* 余额卡片 */
+.balance-card {
+  width: 90%;
+  padding: 40rpx 30rpx;
+  background-color: #ffffff;
+  border-radius: 24rpx;
+  box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.15);
   text-align: center;
-  line-height: 40px;
+  margin-bottom: 60rpx;
+}
+
+.balance-label {
+  font-size: 28rpx;
+  color: #888;
+}
+
+.balance-amount {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 56rpx;
+  font-weight: 600;
+  color: #FFEB3B;
+  text-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.2);
+}
+
+.balance-subtitle {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: #f5f5f5;
+}
+
+/* 按钮区 */
+.balance-actions {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.btn-primary,
+.btn-secondary {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+  border: none;
+}
+
+.btn-primary {
+  background: #ffca28;
+  color: #673ab7;
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:active {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.25);
+  color: #f0f0f0;
+}
+
+.balance-tip {
+  margin-top: 40rpx;
+  font-size: 22rpx;
+  color: #f0f0f0;
+}
+
+/* 流水区域 */
+.history-section {
+  margin-top: 40rpx;
+  width: 90%;
+  max-height: 320rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20rpx;
+  padding: 20rpx 24rpx 24rpx;
+  box-sizing: border-box;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.history-title {
+  font-size: 26rpx;
+  color: #ffffff;
+}
+
+.history-list {
+  max-height: 260rpx;
+}
+
+.history-item {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 16rpx;
+  padding: 16rpx 18rpx;
+  margin-bottom: 12rpx;
+}
+
+.history-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.history-type {
+  font-size: 24rpx;
+  color: #673ab7;
+}
+
+.history-amount {
+  font-size: 26rpx;
+  font-weight: 600;
+}
+
+.amount-plus {
+  color: #43a047;
+}
+
+.amount-minus {
+  color: #e53935;
+}
+
+.history-time {
+  font-size: 20rpx;
+  color: #999999;
+}
+
+.history-remark {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #666666;
+}
+
+.history-empty {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: #f5f5f5;
+  text-align: center;
 }

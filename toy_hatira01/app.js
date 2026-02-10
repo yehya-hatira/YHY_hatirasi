@@ -7,7 +7,9 @@ App({
       uid: '000000001'
     },
     unreadMsgCount: 0, // 全局未读消息数
-    notifications: [] // 全局通知队列
+    notifications: [], // 全局通知队列
+    userBalance: 100, // 全局余额（默认值，可被本地存储覆盖）
+    balanceRecords: [] // 余额流水记录：充值 / 消费
   },
   logout() {
     // 清除登录状态
@@ -24,6 +26,18 @@ App({
     const savedAvatar = wx.getStorageSync('userAvatar');
     if (savedAvatar) {
       this.globalData.userInfo.avatar = savedAvatar;
+    }
+
+    // 载入本地余额
+    const savedBalance = wx.getStorageSync('userBalance');
+    if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
+      this.globalData.userBalance = savedBalance;
+    }
+
+    // 载入余额流水
+    const savedBalanceRecords = wx.getStorageSync('balanceRecords') || [];
+    if (Array.isArray(savedBalanceRecords)) {
+      this.globalData.balanceRecords = savedBalanceRecords;
     }
   }
 });

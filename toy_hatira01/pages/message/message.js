@@ -2,6 +2,7 @@ Page({
   data: {
     showcurrenttime: false, // 显示当前时间
     notifications: [], // 存储通知信息
+    myMsgBadge: 0, // 未读消息计数（用于页面右上角小红点）
   },
   onLoad: function() {
     const app = getApp();
@@ -13,7 +14,10 @@ Page({
       timestamp: this.formatTimestamp(notification.timestamp)
     }));
     
-    this.setData({ notifications: formattedNotifications });
+    this.setData({ 
+      notifications: formattedNotifications,
+      myMsgBadge: app.globalData.unreadMsgCount || 0
+    });
     
     // 不再清空全局队列和未读数
     // app.globalData.notifications = [];

@@ -1,4 +1,48 @@
 <view class="container">
-  <text class="yellow-balance">当前余额: {{userBalance}}币</text>
-  <!-- 其他页面内容 -->
+  <!-- 余额卡片 -->
+  <view class="balance-card">
+    <text class="balance-label">当前余额</text>
+    <text class="balance-amount">{{userBalance}} 币</text>
+    <text class="balance-subtitle">可用于发送礼物等功能</text>
+  </view>
+
+  <!-- 操作按钮区 -->
+  <view class="balance-actions">
+    <button class="btn-primary" bindtap="rechargeBalance">充值余额</button>
+    <button class="btn-secondary" bindtap="toggleHistory">
+      {{showHistory ? '收起记录' : '查看记录'}}
+    </button>
+  </view>
+
+  <!-- 余额流水 -->
+  <view wx:if="{{showHistory}}" class="history-section">
+    <view class="history-header">
+      <text class="history-title">消费记录</text>
+    </view>
+
+    <block wx:if="{{balanceRecords.length}}">
+      <scroll-view class="history-list" scroll-y="true">
+        <block wx:for="{{balanceRecords}}" wx:key="index">
+          <view class="history-item">
+            <view class="history-row">
+              <text class="history-type">
+                {{item.type === 'recharge' ? '充值' : '消费'}}
+              </text>
+              <text class="history-amount {{item.amount > 0 ? 'amount-plus' : 'amount-minus'}}">
+                {{item.amount > 0 ? '+' : ''}}{{item.amount}} 币
+              </text>
+            </view>
+            <text class="history-time">{{item.timestamp}}</text>
+            <text class="history-remark" wx:if="{{item.remark}}">{{item.remark}}</text>
+          </view>
+        </block>
+      </scroll-view>
+    </block>
+
+    <block wx:else>
+      <view class="history-empty">暂时还没有记录</view>
+    </block>
+  </view>
+
+  <text class="balance-tip">提示：余额变动会同步到主页的「me」菜单中。</text>
 </view> 
