@@ -60,13 +60,25 @@
   <!-- 直接显示提示文字 -->
   <view wx:if="{{showFirstImageMessage}}" style="position: fixed; top: 60%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 16px;">这是第一张图片</view>
 
-  <view class="last-key-circle" data-key="last" bindtap="handleKeyClick">↺</view>
-  <view class="func-keys" wx:if="{{showFuncKeys}}">
-    <view class="dele-key-circle {{!deleVisible ? 'hide' : ''}} {{deleVisible ? 'show' : ''}}" data-key="dele" bindtap="handleKeyClick">╳</view>
-    <view class="b0-key-circle {{!b0Visible ? 'hide' : ''}} {{b0Visible ? 'show' : ''}}" data-key="b0" bindtap="handleKeyClick">♡</view>
-    <view class="b1-key-circle {{!b1Visible ? 'hide' : ''}} {{b1Visible ? 'show' : ''}}" data-key="b1" bindtap="handleKeyClick">↓</view>
-    <view class="add-key-circle {{!addVisible ? 'hide' : ''}} {{addVisible ? 'show' : ''}}" data-key="add" bindtap="handleKeyClick">+</view>
+  <view class="last-key-circle" data-key="last" bindtap="handleKeyClick">
+    <image class="func-icon" src="/Img/icons/undo.svg" mode="aspectFit"></image>
   </view>
-  <view class="func-key-circle" data-key="func" bindtap="handleKeyClick">○</view>
+  <view class="func-keys" wx:if="{{showFuncKeys}}">
+    <view class="dele-key-circle {{!deleVisible ? 'hide' : ''}} {{deleVisible ? 'show' : ''}}" data-key="dele" bindtap="handleKeyClick">
+      <image class="func-icon" src="/Img/icons/delete.svg" mode="aspectFit"></image>
+    </view>
+    <view class="b0-key-circle {{!b0Visible ? 'hide' : ''}} {{b0Visible ? 'show' : ''}}" data-key="b0" bindtap="handleKeyClick">
+      <image class="func-icon" src="/Img/icons/heart.svg" mode="aspectFit"></image>
+    </view>
+    <view class="b1-key-circle {{!b1Visible ? 'hide' : ''}} {{b1Visible ? 'show' : ''}}" data-key="b1" bindtap="handleKeyClick">
+      <image class="func-icon" src="/Img/icons/download.svg" mode="aspectFit"></image>
+    </view>
+    <view class="add-key-circle {{!addVisible ? 'hide' : ''}} {{addVisible ? 'show' : ''}}" data-key="add" bindtap="handleKeyClick">
+      <image class="func-icon" src="/Img/icons/add.svg" mode="aspectFit"></image>
+    </view>
+  </view>
+  <view class="func-key-circle" data-key="func" bindtap="handleKeyClick">
+    <image class="func-icon" src="/Img/icons/menu.svg" mode="aspectFit"></image>
+  </view>
   
 </view>
