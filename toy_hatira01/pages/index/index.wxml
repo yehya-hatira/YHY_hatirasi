@@ -40,25 +40,32 @@
     bindtap="closeDropdowns"
   ></view>
 
-  <view class="me-circle" bindtap="handleMeCircleClick">{{i18n[currentLang].me}}
+  <view class="me-circle" bindtap="handleMeCircleClick">
+    <image class="me-icon" src="/Img/icons/user.svg" mode="aspectFit"></image>
     <view class="my-keys" wx:if="{{showMyKeys}}">
       <!-- 消息通知 -->
       <view class="my-Msg-circle {{!myMsgVisible ? 'hide' : 'show'}}" data-key="myMsg" bindtap="navigateToMsgPage">
-        {{i18n[currentLang].messages}}
+        <view class="icon-wrapper">
+          <image class="menu-icon" src="/Img/icons/mail.svg" mode="aspectFit"></image>
+        </view>
         <block wx:if="{{myMsgVisible && myMsgBadge > 0}}">
           <view class="msg-badge">{{myMsgBadge}}</view>
         </block>
       </view>
       <!-- 余额通知 -->
       <view class="my-userBalance-circle {{!myBalanceVisible ? 'hide' : 'show'}}" data-key="myBalance" bindtap="navigateTouserBalancePage">
-        {{i18n[currentLang].balance}}
+        <view class="icon-wrapper">
+          <image class="menu-icon" src="/Img/icons/wallet.svg" mode="aspectFit"></image>
+        </view>
         <block wx:if="{{myBalanceVisible && myBalanceBadge > 0}}">
           <view class="userBalance-badge">{{myBalanceBadge}}</view>
         </block>
       </view>
       <!-- 设置通知 -->
       <view class="my-Setup-circle {{!mysettingVisible ? 'hide' : 'show'}}" data-key="mysetting" bindtap="navigateToSettingsPage">
-        {{i18n[currentLang].settings}}
+        <view class="icon-wrapper">
+          <image class="menu-icon" src="/Img/icons/settings.svg" mode="aspectFit"></image>
+        </view>
       </view>
     </view>
   </view>
@@ -189,13 +196,25 @@
   </view>
 
 
-  <view class="last-key-circle" data-key="last" bindtap="handleKeyClick">↺</view>
-  <view class="func-keys" wx:if="{{showFuncKeys}}">
-    <view class="dele-key-circle {{!deleVisible ? 'hide' : ''}} {{deleVisible ? 'show' : ''}}" data-key="dele" bindtap="handleKeyClick">╳</view>
-    <view class="b0-key-circle {{!b0Visible ? 'hide' : ''}} {{b0Visible ? 'show' : ''}}" data-key="b0" bindtap="handleKeyClick">♡</view>
-    <view class="b1-key-circle {{!b1Visible ? 'hide' : ''}} {{b1Visible ? 'show' : ''}}" data-key="b1" bindtap="handleKeyClick">↓</view>
-    <view class="add-key-circle {{!addVisible ? 'hide' : ''}} {{addVisible ? 'show' : ''}}" data-key="add" bindtap="handleKeyClick">+</view>
+  <view class="last-key-circle" data-key="last" bindtap="handleKeyClick">
+    <image class="func-icon" src="/Img/icons/undo.svg" mode="aspectFit"></image>
   </view>
-  <view class="func-key-circle" data-key="func" bindtap="handleKeyClick">○</view>
+  <view class="func-keys" wx:if="{{showFuncKeys}}">
+    <view class="dele-key-circle {{!deleVisible ? 'hide' : ''}} {{deleVisible ? 'show' : ''}}" data-key="dele" bindtap="handleKeyClick">
+      <image class="func-icon" src="/Img/icons/delete.svg" mode="aspectFit"></image>
+    </view>
+    <view class="b0-key-circle {{!b0Visible ? 'hide' : ''}} {{b0Visible ? 'show' : ''}}" data-key="b0" bindtap="handleKeyClick">
+      <image class="func-icon" src="/Img/icons/heart.svg" mode="aspectFit"></image>
+    </view>
+    <view class="b1-key-circle {{!b1Visible ? 'hide' : ''}} {{b1Visible ? 'show' : ''}}" data-key="b1" bindtap="handleKeyClick">
+      <image class="func-icon" src="/Img/icons/download.svg" mode="aspectFit"></image>
+    </view>
+    <view class="add-key-circle {{!addVisible ? 'hide' : ''}} {{addVisible ? 'show' : ''}}" data-key="add" bindtap="handleKeyClick">
+      <image class="func-icon" src="/Img/icons/add.svg" mode="aspectFit"></image>
+    </view>
+  </view>
+  <view class="func-key-circle" data-key="func" bindtap="handleKeyClick">
+    <image class="func-icon" src="/Img/icons/menu.svg" mode="aspectFit"></image>
+  </view>
   
 </view>
