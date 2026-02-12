@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 蜡烛 -->
+  <path d="M12 3v3"/>
+  <path d="M12 3c0 1-0.5 1.5-0.5 1.5S12 5 12 6"/>
+  <!-- 蛋糕层 -->
+  <rect x="3" y="11" width="18" height="4" rx="1"/>
+  <rect x="3" y="15" width="18" height="6" rx="1"/>
+  <!-- 装饰 -->
+  <path d="M7 11v-2"/>
+  <path d="M12 11v-2"/>
+  <path d="M17 11v-2"/>
+</svg>
+

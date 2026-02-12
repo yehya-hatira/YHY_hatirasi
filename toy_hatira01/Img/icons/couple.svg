@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 左边人物 -->
+  <circle cx="7" cy="6" r="3"/>
+  <path d="M4 14c0-1.5 1.5-3 3-3s3 1.5 3 3v6H4v-6z"/>
+  <!-- 右边人物 -->
+  <circle cx="17" cy="6" r="3"/>
+  <path d="M14 14c0-1.5 1.5-3 3-3s3 1.5 3 3v6h-6v-6z"/>
+  <!-- 爱心 -->
+  <path d="M10 10c0-1 1-2 2-2s2 1 2 2-2 3-2 3-2-2-2-3z"/>
+</svg>
+

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 头部 -->
+  <circle cx="12" cy="8" r="5"/>
+  <!-- 眼睛 -->
+  <circle cx="10" cy="7" r="0.5" fill="currentColor"/>
+  <circle cx="14" cy="7" r="0.5" fill="currentColor"/>
+  <!-- 微笑 -->
+  <path d="M10 10c0 1 1 2 2 2s2-1 2-2"/>
+  <!-- 身体 -->
+  <path d="M7 13c0-1 1-2 2-2h6c1 0 2 1 2 2v6c0 1-1 2-2 2H9c-1 0-2-1-2-2v-6z"/>
+  <!-- 手臂 -->
+  <path d="M7 14l-2 2"/>
+  <path d="M17 14l2 2"/>
+  <!-- 腿 -->
+  <path d="M10 21v2"/>
+  <path d="M14 21v2"/>
+</svg>
+

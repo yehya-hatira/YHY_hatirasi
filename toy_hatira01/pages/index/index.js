@@ -866,20 +866,20 @@ Page({
     // 初始化礼物列表
   initGifts: function () {
     const leftGifts = [
-      { id: 1, name: '心', price: 5, image: '/Img/images/heart.png', forRole: ['普通用户', 'VIP'] },
-      { id: 2, name: '花', price: 10, image: '/Img/images/flower.png', forRole: ['普通用户', 'VIP'] },
-      { id: 3, name: '比心', price: 10, image: '/Img/images/bixin.png', forRole: ['普通用户', 'VIP'] },
-      { id: 4, name: '冰淇淋', price: 10, image: '/Img/images/bingqilin.png', forRole: ['普通用户', 'VIP'] },
-      { id: 5, name: '蝴蝶', price: 10, image: '/Img/images/hudie.png', forRole: ['普通用户', 'VIP'] },
-      { id: 6, name: '棒棒糖', price: 20, image: '/Img/images/bbt.png', forRole: ['普通用户', 'VIP'] }
+      { id: 1, name: '爱心', price: 5, image: '/Img/icons/heart.svg', forRole: ['普通用户', 'VIP'] },
+      { id: 2, name: '玫瑰', price: 10, image: '/Img/icons/rose.svg', forRole: ['普通用户', 'VIP'] },
+      { id: 3, name: '情侣', price: 10, image: '/Img/icons/couple.svg', forRole: ['普通用户', 'VIP'] },
+      { id: 4, name: '咖啡', price: 15, image: '/Img/icons/coffee.svg', forRole: ['普通用户', 'VIP'] },
+      { id: 5, name: '蛋糕', price: 20, image: '/Img/icons/cake.svg', forRole: ['普通用户', 'VIP'] },
+      { id: 6, name: '电影票', price: 25, image: '/Img/icons/movie.svg', forRole: ['普通用户', 'VIP'] }
     ];
     const rightGifts = [
-      { id: 7, name: '星星', price: 15, image: '/Img/images/star.png', forRole: ['VIP'] },
-      { id: 8, name: '啤酒', price: 30, image: '/Img/images/pijiu.png', forRole: ['VIP'] },
-      { id: 9, name: '墨镜', price: 40, image: '/Img/images/mojing.png', forRole: ['VIP'] },
-      { id: 10, name: '直升飞机', price: 40, image: '/Img/images/helicopter.png', forRole: ['VIP'] },
-      { id: 11, name: '热气球', price: 40, image: '/Img/images/reqiqiu.png', forRole: ['VIP'] },
-      { id: 12, name: '私人飞机', price: 50, image: '/Img/images/feiji.png', forRole: ['VIP'] }
+      { id: 7, name: '花束', price: 40, image: '/Img/icons/bouquet.svg', forRole: ['VIP'] },
+      { id: 8, name: '戒指', price: 50, image: '/Img/icons/ring.svg', forRole: ['VIP'] },
+      { id: 9, name: '婚礼蛋糕', price: 60, image: '/Img/icons/wedding-cake.svg', forRole: ['VIP'] },
+      { id: 10, name: '小宝宝', price: 80, image: '/Img/icons/baby.svg', forRole: ['VIP'] },
+      { id: 11, name: '房子', price: 100, image: '/Img/icons/house.svg', forRole: ['VIP'] },
+      { id: 12, name: '蜜月旅行', price: 120, image: '/Img/icons/plane.svg', forRole: ['VIP'] }
     ];
 
     // 复制礼物列表以实现循环滚动

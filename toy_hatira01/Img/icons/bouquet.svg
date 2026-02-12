@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 花束 -->
+  <circle cx="8" cy="6" r="2"/>
+  <circle cx="12" cy="4" r="2"/>
+  <circle cx="16" cy="6" r="2"/>
+  <circle cx="10" cy="8" r="2"/>
+  <circle cx="14" cy="8" r="2"/>
+  <!-- 花茎 -->
+  <path d="M8 8l-1 6"/>
+  <path d="M12 6v8"/>
+  <path d="M16 8l1 6"/>
+  <path d="M10 10l-1 4"/>
+  <path d="M14 10l1 4"/>
+  <!-- 包装 -->
+  <path d="M6 14l6 8 6-8z"/>
+</svg>
+

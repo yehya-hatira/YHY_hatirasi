@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 屋顶 -->
+  <path d="M3 12l9-9 9 9"/>
+  <!-- 房子主体 -->
+  <path d="M5 12v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/>
+  <!-- 门 -->
+  <rect x="10" y="15" width="4" height="7"/>
+  <!-- 窗户 -->
+  <rect x="7" y="13" width="3" height="3"/>
+  <rect x="14" y="13" width="3" height="3"/>
+  <!-- 烟囱 -->
+  <path d="M15 5v3"/>
+</svg>
+
