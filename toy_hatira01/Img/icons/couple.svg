@@ -1,11 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <!-- 左边人物 -->
-  <circle cx="7" cy="6" r="3"/>
-  <path d="M4 14c0-1.5 1.5-3 3-3s3 1.5 3 3v6H4v-6z"/>
-  <!-- 右边人物 -->
-  <circle cx="17" cy="6" r="3"/>
-  <path d="M14 14c0-1.5 1.5-3 3-3s3 1.5 3 3v6h-6v-6z"/>
-  <!-- 爱心 -->
-  <path d="M10 10c0-1 1-2 2-2s2 1 2 2-2 3-2 3-2-2-2-3z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 男生 - 左边 -->
+  <circle cx="8" cy="7" r="2.5"/>
+  <path d="M8 9.5c-2 0-3.5 1.5-3.5 3.5v5c0 0.5 0.5 1 1 1h5c0.5 0 1-0.5 1-1v-5c0-2-1.5-3.5-3.5-3.5z"/>
+  <!-- 男生头发 -->
+  <path d="M6 6c0-1 0.5-2 2-2s2 1 2 2"/>
+  
+  <!-- 女生 - 右边 -->
+  <circle cx="16" cy="7" r="2.5"/>
+  <path d="M16 9.5c-2 0-3.5 1.5-3.5 3.5v5c0 0.5 0.5 1 1 1h5c0.5 0 1-0.5 1-1v-5c0-2-1.5-3.5-3.5-3.5z"/>
+  <!-- 女生长发 -->
+  <path d="M14 6c0-1.5 0.5-2.5 2-2.5s2 1 2 2.5"/>
+  <path d="M14 7c-0.5 0.5-0.5 2-0.5 3"/>
+  <path d="M18 7c0.5 0.5 0.5 2 0.5 3"/>
+  
+  <!-- 中间的爱心 -->
+  <path d="M12 11c-0.5-0.5-1-0.5-1.5 0s-0.5 1 0 1.5l1.5 1.5 1.5-1.5c0.5-0.5 0.5-1 0-1.5s-1-0.5-1.5 0z" fill="#ffffff"/>
+  
+  <!-- 手牵手 -->
+  <path d="M10.5 14h3" stroke-width="1.5"/>
 </svg>
-

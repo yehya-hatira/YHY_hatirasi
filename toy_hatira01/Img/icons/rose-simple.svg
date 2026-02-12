@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 左侧大花瓣 -->
+  <path d="M8 8 Q7 6, 8 4 Q9 3, 10 4 L10 8"/>
+  
+  <!-- 右侧大花瓣 -->
+  <path d="M16 8 Q17 6, 16 4 Q15 3, 14 4 L14 8"/>
+  
+  <!-- 中间叶子 - 左 -->
+  <path d="M12 12 Q16 12, 7 13 Q16 14, 12 14"/>
+  
+  <!-- 中间叶子 - 右 -->
+  <path d="M12 12 Q16 12, 17 13 Q16 14, 12 14"/>
+  
+  <!-- 底部小叶子 -->
+  <path d="M12 18 Q9 18, 8.5 19 Q9 20, 12 19.5"/>
+  
+  <!-- 花朵底部 -->
+  <path d="M10 8 Q12 9, 14 8"/>
+  
+  <!-- 螺旋中心 -->
+  <circle cx="12" cy="3.5" r="0.8"/>
+  <path d="M12 2.7 Q13 3, 13 4"/>
+  
+  <!-- 花茎 -->
+  <line x1="12" y1="8" x2="12" y2="22"/>
+</svg>

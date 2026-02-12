@@ -8,7 +8,7 @@ App({
     },
     unreadMsgCount: 0, // 全局未读消息数
     notifications: [], // 全局通知队列
-    userBalance: 100, // 全局余额（默认值，可被本地存储覆盖）
+    userBalance: 500, // 全局余额（默认值，可被本地存储覆盖）
     balanceRecords: [] // 余额流水记录：充值 / 消费
   },
   logout() {

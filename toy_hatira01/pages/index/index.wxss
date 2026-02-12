@@ -267,8 +267,8 @@ page {
   top: 50px;
   width: 98px;
   height: 200px;
-  background-color: #FFFFFF;
-  border: 1px solid #ED82EB;
+  background-color: transparent; /* 透明背景 */
+  border: 0.5px solid rgba(255, 255, 255, 0.3); /* 半透明白色边框 */
   border-radius: 5px; /* 添加圆角 */
 }
 
@@ -278,8 +278,8 @@ page {
   top: 50px;
   width: 98px;
   height: 200px;
-  background-color: #FFFFFF;
-  border: 1px solid #ED82EB;
+  background-color: transparent; /* 透明背景 */
+  border: 0.5px solid rgba(255, 255, 255, 0.3); /* 半透明白色边框 */
   border-radius: 5px; /* 添加圆角 */
 }
 
@@ -374,8 +374,7 @@ page {
   top: 275px;
   width: 40px;
   height: 360px; /* 设置固定高度 */
-  background-color: #FFFFFF;
-  border: 2px solid #AC33C1;
+  background-color: transparent; /* 透明背景 */
   overflow: hidden; /* 隐藏超出部分 */
   border-radius: 5px; /* 添加圆角 */
 }
@@ -387,8 +386,7 @@ page {
   top: 275px;
   width: 40px;
   height: 360px; /* 设置固定高度 */
-  background-color: #FFFFFF;
-  border: 2px solid #AC33C1;
+  background-color: transparent; /* 透明背景 */
   overflow: hidden; /* 隐藏超出部分 */
   border-radius: 5px; /* 添加圆角 */
 }
@@ -417,13 +415,24 @@ page {
   height: 360px; /* 与礼物区域高度一致 */
   overflow-y: scroll;
   scroll-snap-type: y mandatory; /* 启用垂直滚动吸附 */
+  background-color: transparent; /* 透明背景 */
+}
+
+/* 隐藏滚动条 */
+.gift-scroll::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条 */
+}
+
+.gift-scroll {
+  -ms-overflow-style: none; /* IE和Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* 礼物项样式 */
 .gift-item {
   padding: 5px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* 半透明白色边框 */
+  margin-bottom: 5px; /* 减小间距为原来的0.5倍 */
   text-align: center;
   height: 50px; /* 固定高度为50px */
   display: flex;
@@ -432,11 +441,12 @@ page {
   justify-content: center;
   position: relative; /* 为价格区域定位做准备 */
   overflow: hidden; /* 隐藏超出部分 */
+  background-color: transparent; /* 透明背景 */
 }
 
 .gift-item.selected {
-  background-color: #f0f0f0;
-  border-color: #007bff;
+  background-color: rgba(255, 255, 255, 0.2); /* 半透明白色背景 */
+  border-color: rgba(255, 255, 255, 0.8); /* 更明显的白色边框 */
 }
 
 
@@ -449,12 +459,13 @@ page {
 /* 礼物文字样式 */
 .gift-item text {
   font-size: 12px; /* 调整文字大小 */
+  color: #ffffff; /* 白色文字 */
 }
 
 
 .gift-item.selected {
-  border: 2px solid #2A82E4; /* 选中状态边框颜色 */
-  background-color: #f0f8ff; /* 选中状态背景颜色 */
+  border: 2px solid rgba(255, 255, 255, 0.8); /* 选中状态边框颜色 */
+  background-color: rgba(255, 255, 255, 0.2); /* 选中状态背景颜色 */
 }
 
 .b-l-send-rectangle {
