@@ -102,17 +102,17 @@ Page({
 
   // 平滑动画 - 直接飞回效果
   smoothAnimation(initialX, initialY, index) {
-    setTimeout(() => {
-      this.setData({
-        restoringTranslateX: 0,
-        restoringTranslateY: 0,
-        restoringOpacity: 1
-      });
-    }, 100); // 让用户看到从屏幕外开始
+    // 立即开始动画
+    this.setData({
+      restoringTranslateX: 0,
+      restoringTranslateY: 0,
+      restoringOpacity: 1
+    });
 
+    // 动画完成后清理
     setTimeout(() => {
       this.finishRestoreAnimation(index);
-    }, 50); // 总时间
+    }, 800); // 0.8s动画时间
   },
 
   // 完成恢复动画
@@ -472,20 +472,21 @@ Page({
   // 图片触摸移动事件
   onImageTouchMove(e) {
     if (this.data.isBAnimating) return; // 如果正在动画中，不处理拖拽
-    const { startX, startY, threshold } = this.data;
+    const { startX, startY } = this.data;
     const moveX = e.touches[0].pageX;
     const moveY = e.touches[0].pageY;
     const distanceX = moveX - startX;
     const distanceY = moveY - startY;
 
-    if (Math.abs(distanceX) > threshold || Math.abs(distanceY) > threshold) {
-      const opacity = Math.max(0.1, 1 - Math.sqrt(distanceX ** 2 + distanceY ** 2) / 200);
-      this.setData({
-        opacity,
-        translateX: distanceX,
-        translateY: distanceY
-      });
-    }
+    // 实时更新位置和透明度，让拖拽更跟手
+    const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+    const opacity = Math.max(0.1, 1 - distance / 300);
+    
+    this.setData({
+      opacity,
+      translateX: distanceX,
+      translateY: distanceY
+    });
   },
 
   // 图片触摸结束事件
@@ -539,7 +540,8 @@ Page({
           translateY: 0,
           opacity: 1,
           isBAnimating: false,
-          lastPicture: lastPicture
+          lastPicture: lastPicture,
+          draggingIndex: null // 重置拖拽索引
         });
 
         console.log('被滑走的当前照片序号:', currentBIndex);
@@ -550,7 +552,8 @@ Page({
       this.setData({
         translateX: 0,
         translateY: 0,
-        opacity: 1
+        opacity: 1,
+        draggingIndex: null // 重置拖拽索引
       });
     }
   },
@@ -571,30 +574,31 @@ Page({
       const initialTranslateY = Math.sin(angle) * distance;
 
       console.log('窗口宽度：',screenWidth,'窗口高度：',screenHeight);
-      const animationType = this.getRandomAnimationType();
+      console.log('返回照片：', index, '从位置飞回:', initialTranslateX, initialTranslateY);
+      
+      // 第一步：设置初始位置（屏幕外），禁用transition
       this.setData({
-        disableRestoringTransition: true, // 禁用transition
         restoringIndex: index,
         restoringTranslateX: initialTranslateX,
         restoringTranslateY: initialTranslateY,
         restoringOpacity: 0.3,
-        restoringAnimationType: animationType,
+        disableRestoringTransition: true,
         isBAnimating: true
       });
 
-      // 触发滑入动画
+      // 第二步：等待一帧，确保初始位置已渲染
       setTimeout(() => {
+        // 启用transition
         this.setData({
-          disableRestoringTransition: false // 启用transition
+          disableRestoringTransition: false
         });
-      }, 300); // 确保初始位置设置完成
-
-      // 第三步：开始动画
-      setTimeout(() => {
-        console.log('第三步：开始飞回动画');
-        this.executeRestoreAnimation(animationType, initialTranslateX, initialTranslateY, index);
-      }, 10);
-      console.log('返回了照片：', index, '从位置飞回:', initialTranslateX, initialTranslateY);
+        
+        // 第三步：再等待一帧，然后开始动画
+        setTimeout(() => {
+          console.log('开始飞回动画');
+          this.smoothAnimation(initialTranslateX, initialTranslateY, index);
+        }, 20);
+      }, 20);
     } else {
       // 如果 lastPicture 为空，允许用户继续滑动照片
       console.log('lastPicture 为空，无法返回上一张照片');
