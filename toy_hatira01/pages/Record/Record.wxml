@@ -52,13 +52,15 @@
   <!-- 添加上传图片区域 -->
   <view class="b-photo-area">
     <block wx:for="{{bImages}}" wx:key="*this">
-      <image src="{{item}}" mode="aspectFill" class="uploaded-image" data-index="{{index}}" bindtouchstart="onImageTouchStart" bindtouchmove="onImageTouchMove" bindtouchend="onImageTouchEnd" style="z-index: {{index === currentBIndex ? 7 : (index === (currentBIndex + 1) % bImages.length ? 6 : (index === (currentBIndex + 2) % bImages.length ? 5 : 1))}}; height: {{index === currentBIndex ? 340 : (index === (currentBIndex + 1) % bImages.length ? 370 : 400)}}px; opacity: {{index === draggingIndex ? opacity : 1}}; transform: translate({{index === currentBIndex ? translateX : 0}}px, {{index === currentBIndex ? translateY : 0}}px); transition: {{index === currentBIndex ? 'transform 0.3s ease-out, opacity 0.3s ease-out' : 'none'}};"></image>
+      <image src="{{item}}" mode="aspectFill" class="uploaded-image" data-index="{{index}}" bindtouchstart="onImageTouchStart" bindtouchmove="onImageTouchMove" bindtouchend="onImageTouchEnd" style="z-index: {{index === restoringIndex ? 10 : (index === currentBIndex ? 7 : (index === (currentBIndex + 1) % bImages.length ? 6 : (index === (currentBIndex + 2) % bImages.length ? 5 : 1)))}}; height: {{index === restoringIndex ? 340 : (index === currentBIndex ? 340 : (index === (currentBIndex + 1) % bImages.length ? 370 : 400))}}px; opacity: {{index === draggingIndex ? opacity : (index === restoringIndex ? restoringOpacity : 1)}}; transform: translate({{index === currentBIndex ? translateX : (index === restoringIndex ? restoringTranslateX : 0)}}px, {{index === currentBIndex ? translateY : (index === restoringIndex ? restoringTranslateY : 0)}}px); transition: {{index === currentBIndex ? 'transform 0.3s ease-out, opacity 0.3s ease-out' : (index === restoringIndex ? (disableRestoringTransition ? 'none' : 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease-out') : 'none')}};"></image>
     </block>
     <view class="add-image-b" wx:if="{{showAddBImage}}" bindtap="chooseBImage">+</view>
   </view>
   
   <!-- 直接显示提示文字 -->
-  <view wx:if="{{showFirstImageMessage}}" style="position: fixed; top: 60%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 16px;">这是第一张图片</view>
+  <view wx:if="{{showFirstImageMessage}}" style="position: fixed;z-index: 9; top: 60%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 16px;">
+    {{i18n[currentLang].firstImageTip}}
+  </view>
 
   <view class="last-key-circle" data-key="last" bindtap="handleKeyClick">
     <image class="func-icon" src="/Img/icons/undo.svg" mode="aspectFit"></image>

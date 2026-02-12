@@ -35,6 +35,12 @@ Page({
     showFirstImageMessage: false, // 控制提示信息的显示
     startTime: 0, // 记录拖拽开始时间
     dragSpeed: 0, // 记录拖拽速度
+    restoringIndex: null, // 正在恢复的图片索引
+    restoringTranslateX: 0, // 恢复图片的水平位移
+    restoringTranslateY: 0, // 恢复图片的垂直位移
+    restoringOpacity: 1, // 恢复图片的透明度
+    restoringAnimationType: 'smooth', // 恢复动画类型
+    disableRestoringTransition: false, // 是否禁用恢复动画的transition
 
     i18n: {
       ug: {
@@ -45,7 +51,8 @@ Page({
         confirmDelete: 'راستىنلا ئۆچۈرەمسىز؟',
         success: 'مۇۋەپپەقىيەتلىك',
         fail: 'مەغلۇپ بولدى',
-        language: 'تىل'
+        language: 'تىل',
+        firstImageTip: 'بۇ بىرىنچى سۈرەت'
       },
       zh: {
         title: '瞎记',
@@ -55,7 +62,8 @@ Page({
         confirmDelete: '确定要删除吗？',
         success: '成功',
         fail: '失败',
-        language: '语言'
+        language: '语言',
+        firstImageTip: '这是第一张图片'
       },
       en: {
         title: 'Notes',
@@ -65,7 +73,8 @@ Page({
         confirmDelete: 'Confirm to delete?',
         success: 'Success',
         fail: 'Failed',
-        language: 'Language'
+        language: 'Language',
+        firstImageTip: 'This is the first photo'
       },
       tr: {
         title: 'Notlar',
@@ -75,9 +84,48 @@ Page({
         confirmDelete: 'Silmeyi onayla?',
         success: 'Başarılı',
         fail: 'Başarısız',
-        language: 'Dil'
+        language: 'Dil',
+        firstImageTip: 'Bu ilk fotoğraf'
       }
     },
+  },
+  
+  // 统一使用平滑动画
+  getRandomAnimationType() {
+    return 'smooth'; // 只使用平滑效果，不要回弹
+  },
+
+  // 执行恢复动画 - 统一平滑效果
+  executeRestoreAnimation(animationType, initialX, initialY, index) {
+    this.smoothAnimation(initialX, initialY, index);
+  },
+
+  // 平滑动画 - 直接飞回效果
+  smoothAnimation(initialX, initialY, index) {
+    setTimeout(() => {
+      this.setData({
+        restoringTranslateX: 0,
+        restoringTranslateY: 0,
+        restoringOpacity: 1
+      });
+    }, 100); // 让用户看到从屏幕外开始
+
+    setTimeout(() => {
+      this.finishRestoreAnimation(index);
+    }, 50); // 总时间
+  },
+
+  // 完成恢复动画
+  finishRestoreAnimation(index) {
+    this.setData({
+      currentBIndex: index,
+      restoringIndex: null,
+      restoringTranslateX: 0,
+      restoringTranslateY: 0,
+      restoringOpacity: 1,
+      disableRestoringTransition: false,
+      isBAnimating: false
+    });
   },
   onLoad: function () {
     console.log('页面加载');
@@ -516,27 +564,37 @@ Page({
       // 根据滑出角度计算滑入的初始位置
       const screenWidth = wx.getSystemInfoSync().windowWidth;
       const screenHeight = wx.getSystemInfoSync().windowHeight;
-      const initialTranslateX = Math.cos(angle) * screenWidth; // 从屏幕外滑入的初始X位置
-      const initialTranslateY = Math.sin(angle) * screenHeight; // 从屏幕外滑入的初始Y位置
+
+      // 计算从屏幕外的初始位置，确保足够远
+      const distance = Math.max(screenWidth, screenHeight) * 2; // 增加距离
+      const initialTranslateX = Math.cos(angle) * distance;
+      const initialTranslateY = Math.sin(angle) * distance;
+
       console.log('窗口宽度：',screenWidth,'窗口高度：',screenHeight);
+      const animationType = this.getRandomAnimationType();
       this.setData({
-        currentBIndex: index,
-        translateX: initialTranslateX,
-        translateY: initialTranslateY,
-        opacity: 0,
+        disableRestoringTransition: true, // 禁用transition
+        restoringIndex: index,
+        restoringTranslateX: initialTranslateX,
+        restoringTranslateY: initialTranslateY,
+        restoringOpacity: 0.3,
+        restoringAnimationType: animationType,
         isBAnimating: true
       });
 
       // 触发滑入动画
       setTimeout(() => {
         this.setData({
-          translateX: 0,
-          translateY: 0,
-          opacity: 1,
-          isBAnimating: false
+          disableRestoringTransition: false // 启用transition
         });
-      }, 300); // 滑入动画时间
-      console.log('返回了照片：', index, 'translateX:', translateX, 'translateY:', translateY, 'opacity:', 1);
+      }, 300); // 确保初始位置设置完成
+
+      // 第三步：开始动画
+      setTimeout(() => {
+        console.log('第三步：开始飞回动画');
+        this.executeRestoreAnimation(animationType, initialTranslateX, initialTranslateY, index);
+      }, 10);
+      console.log('返回了照片：', index, '从位置飞回:', initialTranslateX, initialTranslateY);
     } else {
       // 如果 lastPicture 为空，允许用户继续滑动照片
       console.log('lastPicture 为空，无法返回上一张照片');

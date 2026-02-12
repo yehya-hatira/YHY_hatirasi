@@ -224,93 +224,99 @@ page {
 
 
  .last-key-circle {
-   position: absolute;
-   left: 24px;
-   top: 700px;
-   width: 40px;
-   height: 40px;
-   border-radius: 50%;
-   background-image: radial-gradient(circle, #ffffff, #9e0fe0d3); /* 从圆心到圆周的渐变 */
-   border: 2px solid #AC33C1;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
- }
- .dele-key-circle {
-   position: absolute;
-   left: 94px;
-   top: 680px;
-   width: 40px;
-   height: 40px;
-   border-radius: 50%;
-   background-image: radial-gradient(circle, #ffffff, #9e0fe0d3); /* 从圆心到圆周的渐变 */
-   border: 2px solid #AC33C1;
-   z-index: 4;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
- }
- .b0-key-circle {
-   position: absolute;
-   left: 148px;
-   top: 680px;
-   width: 40px;
-   height: 40px;
-   border-radius: 50%;
-   background-image: radial-gradient(circle, #ffffff, #9e0fe0d3); /* 从圆心到圆周的渐变 */
-   border: 2px solid #AC33C1;
-   z-index: 4;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
- }
- .b1-key-circle {
-   position: absolute;
-   left: 206px;
-   top: 680px;
-   width: 40px;
-   height: 40px;
-   border-radius: 50%;
-   background-image: radial-gradient(circle, #ffffff, #9e0fe0d3); /* 从圆心到圆周的渐变 */
-   border: 2px solid #AC33C1;
-   z-index: 4;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
- }
- .add-key-circle {
-   position: absolute;
-   left: 260px;
-   top: 680px;
-   width: 40px;
-   height: 40px;
-   border-radius: 50%;
-   background-image: radial-gradient(circle, #ffffff, #9e0fe0d3); /* 从圆心到圆周的渐变 */
-   border: 2px solid #AC33C1;
-   z-index: 4;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
- }
- .func-key-circle {
-   position: absolute;
-   left: 324px;
-   top: 700px;
-   width: 40px;
-   height: 40px;
-   border-radius: 50%;
-   background-image: radial-gradient(circle, #ffffff, #9e0fe0d3);
-   border: 2px solid #AC33C1;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
- }
+  position: absolute;
+  left: 24px;
+  top: 690px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-image: radial-gradient(circle, #390F66, #9c27b0); /* 从圆心到圆周的渐变 */
+  border: 2px solid #AC33C1;
+  color: #ffffff; /* 字体颜色 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
+}
+.dele-key-circle {
+  position: absolute;
+  left: 94px;
+  top: 670px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-image: radial-gradient(circle, #390F66, #9c27b0); /* 从圆心到圆周的渐变 */
+  border: 2px solid #AC33C1;
+  color: #ffffff; /* 字体颜色 */
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
+}
+.b0-key-circle {
+  position: absolute;
+  left: 148px;
+  top: 670px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-image: radial-gradient(circle, #390F66, #9c27b0); /* 从圆心到圆周的渐变 */
+  border: 2px solid #AC33C1;
+  color: #ffffff; /* 字体颜色 */
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
+}
+.b1-key-circle {
+  position: absolute;
+  left: 206px;
+  top: 670px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-image: radial-gradient(circle, #390F66, #9c27b0); /* 从圆心到圆周的渐变 */
+  border: 2px solid #AC33C1;
+  color: #ffffff; /* 字体颜色 */
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
+}
+.add-key-circle {
+  position: absolute;
+  left: 260px;
+  top: 670px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-image: radial-gradient(circle, #390F66, #9c27b0); /* 从圆心到圆周的渐变 */
+  border: 2px solid #AC33C1;
+  color: #ffffff; /* 字体颜色 */
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
+}
+.func-key-circle {
+  position: absolute;
+  left: 324px;
+  top: 690px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-image: radial-gradient(circle, #390F66, #9c27b0);
+  border: 2px solid #AC33C1;
+  color: #ffffff; /* 字体颜色 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.1); /* 新增投影 */
+}
 
  .func-icon {
    width: 24px;
