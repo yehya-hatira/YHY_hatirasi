@@ -1071,14 +1071,18 @@ Page({
   },
 
   navigateTouserBalancePage: function() {
-    // console.log('Navigating to Balance Page');
+    console.log('Navigating to Balance Page');
+    
+    // 清空余额红点
+    this.setData({ myBalanceBadge: 0 });
+    
     wx.navigateTo({
       url: '/pages/Balance/balance', // 确保路径正确
       success: function() {
-        // console.log('Navigation to Balance Page successful');
+        console.log('Navigation to Balance Page successful');
       },
       fail: function(err) {
-        // console.error('Navigation to Balance Page failed', err);
+        console.error('Navigation to Balance Page failed', err);
       }
     });
   },
