@@ -38,7 +38,10 @@ Page({
     opacity: 1, // 图片透明度
     translateX: 0, // 图片水平位移
     translateY: 0, // 图片垂直位移
+    rotation: 0, // 图片旋转角度
     isBAnimating: false, // 是否正在动画中
+    showLikeLabel: false, // 显示"喜欢"标签
+    showDislikeLabel: false, // 显示"不喜欢"标签
     showFirstImageMessage: false, // 控制提示信息的显示
     startTime: 0, // 记录拖拽开始时间
     dragSpeed: 0, // 记录拖拽速度
@@ -154,6 +157,7 @@ Page({
   onLoad: function () {
     console.log('页面加载');
     this.audioContext = wx.createInnerAudioContext(); // 确保初始化
+    this.lastScrollSoundTime = 0; // 初始化滚动音效时间戳
     this.updatePageText(); // 初始化页面文本
     this.startAutoPlay();//启动自动轮播
     this.getUserBalance();//获取初始化余额
@@ -334,10 +338,7 @@ Page({
     const key = e.currentTarget.dataset.key; // 获取点击的键
     console.log('点击的键:', key);
     if (key === 'last') {
-      this.setData({
-        isBAnimating: true
-      });
-      this.prevBImage(); // 上一张图片
+      this.prevBImage(); // 直接调用，不要提前设置 isBAnimating
     } else if (key === 'add') {
       this.chooseBImage(); // 通过 add-key-circle 上传图片
     }else if (key === 'func') {
@@ -546,28 +547,70 @@ Page({
   // 左侧滚动事件
   handleLeftScroll: function (e) {
     const scrollTop = e.detail.scrollTop;
-    const itemHeight = 60; // 每个礼物项的高度
-    const totalHeight = this.data.leftGifts.length * itemHeight;
+    const itemHeight = 55; // 每个礼物项的高度（50px + 5px margin）
+    const baseGiftCount = 6; // 基础礼物数量
+    const singleSetHeight = baseGiftCount * itemHeight; // 一组礼物的总高度
 
-    // 如果滚动到顶部或底部，调整滚动位置
-    if (scrollTop < itemHeight || scrollTop > totalHeight - 2 * itemHeight) {
+    // 播放滚动音效
+    this.playScrollSound();
+
+    // 无限滚动逻辑：当滚动超过2组时，瞬间跳回到第1组的相同位置
+    if (scrollTop >= singleSetHeight * 3) {
+      // 滚动到第4组开始位置，跳回第2组
+      const offset = scrollTop - singleSetHeight * 3;
       this.setData({
-        leftScrollTop: totalHeight / 3 + scrollTop % (totalHeight / 3),
+        leftScrollTop: singleSetHeight + offset
+      });
+    } else if (scrollTop < singleSetHeight) {
+      // 滚动到第1组之前，跳到第3组
+      const offset = singleSetHeight - scrollTop;
+      this.setData({
+        leftScrollTop: singleSetHeight * 3 - offset
       });
     }
   },
+  
   // 右侧滚动事件
   handleRightScroll: function (e) {
     const scrollTop = e.detail.scrollTop;
-    const itemHeight = 60; // 每个礼物项的高度
-    const totalHeight = this.data.rightGifts.length * itemHeight;
+    const itemHeight = 55; // 每个礼物项的高度（50px + 5px margin）
+    const baseGiftCount = 6; // 基础礼物数量
+    const singleSetHeight = baseGiftCount * itemHeight; // 一组礼物的总高度
 
-    // 如果滚动到顶部或底部，调整滚动位置
-    if (scrollTop < itemHeight || scrollTop > totalHeight - 2 * itemHeight) {
+    // 播放滚动音效
+    this.playScrollSound();
+
+    // 无限滚动逻辑：当滚动超过2组时，瞬间跳回到第1组的相同位置
+    if (scrollTop >= singleSetHeight * 3) {
+      // 滚动到第4组开始位置，跳回第2组
+      const offset = scrollTop - singleSetHeight * 3;
       this.setData({
-        rightScrollTop: totalHeight / 3 + scrollTop % (totalHeight / 3),
+        rightScrollTop: singleSetHeight + offset
+      });
+    } else if (scrollTop < singleSetHeight) {
+      // 滚动到第1组之前，跳到第3组
+      const offset = singleSetHeight - scrollTop;
+      this.setData({
+        rightScrollTop: singleSetHeight * 3 - offset
       });
     }
+  },
+
+  // 播放滚动音效
+  playScrollSound: function() {
+    // 节流：避免频繁播放
+    const now = Date.now();
+    if (now - this.lastScrollSoundTime < 50) return; // 50ms 内只播放一次
+    this.lastScrollSoundTime = now;
+
+    // 创建音频上下文并播放滚动音效
+    const innerAudioContext = wx.createInnerAudioContext();
+    innerAudioContext.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA='; // 短促的滴答声
+    innerAudioContext.volume = 0.3; // 音量设置为30%
+    innerAudioContext.play();
+    innerAudioContext.onEnded(() => {
+      innerAudioContext.destroy();
+    });
   },
 
   // 左侧礼物选择事件
@@ -882,7 +925,7 @@ Page({
       { id: 12, name: '蜜月旅行', price: 120, image: '/Img/icons/plane.svg', forRole: ['VIP'] }
     ];
 
-    // 复制礼物列表以实现循环滚动
+    // 复制礼物列表以实现无限滚动（复制100份确保真正无限）
     const generateUniqueGifts = (gifts, copies) => {
       const uniqueGifts = [];
       for (let i = 0; i < copies; i++) {
@@ -894,9 +937,14 @@ Page({
       return uniqueGifts;
     };
 
+    const leftGiftsList = generateUniqueGifts(leftGifts, 100);
+    const rightGiftsList = generateUniqueGifts(rightGifts, 100);
+
     this.setData({
-      leftGifts: generateUniqueGifts(leftGifts, 3), // 复制3份
-      rightGifts: generateUniqueGifts(rightGifts, 3), // 复制3份
+      leftGifts: leftGiftsList,
+      rightGifts: rightGiftsList,
+      leftScrollTop: leftGifts.length * 55 * 50, // 初始滚动到中间位置
+      rightScrollTop: rightGifts.length * 55 * 50 // 初始滚动到中间位置
     });
   },
 
@@ -1069,10 +1117,10 @@ Page({
       restoringOpacity: 1
     });
 
-    // 动画完成后清理
+    // 动画完成后清理（优化为0.6s）
     setTimeout(() => {
       this.finishRestoreAnimation(index);
-    }, 800); // 0.8s动画时间
+    }, 600);
   },
 
   // 完成恢复动画
@@ -1113,12 +1161,19 @@ Page({
    // 图片触摸开始事件
    onImageTouchStart(e) {
     if (this.data.isBAnimating) return; // 如果正在动画中，不处理拖拽
+    
+    // 添加轻微震动反馈
+    wx.vibrateShort({
+      type: 'light'
+    });
+    
     this.setData({
       draggingIndex: e.currentTarget.dataset.index,
       startX: e.touches[0].pageX,
       startY: e.touches[0].pageY,
       translateX: 0,
       translateY: 0,
+      rotation: 0,
       startTime: Date.now() // 记录拖拽开始时间
     });
   },
@@ -1136,17 +1191,27 @@ Page({
     const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
     const opacity = Math.max(0.1, 1 - distance / 300);
     
+    // 添加旋转效果：根据水平位移计算旋转角度（最大15度）
+    const rotation = (distanceX / 10) * 0.5;
+    
+    // 显示方向标签
+    const showLikeLabel = distanceX > 80;
+    const showDislikeLabel = distanceX < -80;
+    
     this.setData({
       opacity,
       translateX: distanceX,
-      translateY: distanceY
+      translateY: distanceY,
+      rotation: Math.max(-15, Math.min(15, rotation)),
+      showLikeLabel,
+      showDislikeLabel
     });
   },
 
   // 图片触摸结束事件
   onImageTouchEnd(e) {
     if (this.data.isBAnimating) return; // 如果正在动画中，不处理拖拽
-    const { startX, startY, threshold, currentBIndex, bImages, startTime } = this.data;
+    const { startX, startY, threshold, currentBIndex, bImages, startTime, rotation } = this.data;
     const endX = e.changedTouches[0].pageX;
     const endY = e.changedTouches[0].pageY;
     const distanceX = endX - startX;
@@ -1155,35 +1220,40 @@ Page({
     if (Math.abs(distanceX) > threshold || Math.abs(distanceY) > threshold) {
       // 计算拖拽速度
       const endTime = Date.now();
-      const dragDuration = endTime - startTime; // 拖拽持续时间
-      const dragSpeed = Math.sqrt(distanceX ** 2 + distanceY ** 2) / dragDuration; // 拖拽速度
+      const dragDuration = endTime - startTime;
+      const dragSpeed = Math.sqrt(distanceX ** 2 + distanceY ** 2) / dragDuration;
 
       // 根据拖拽速度动态调整动画时间
-      const animationDuration = Math.max(200, Math.min(500, 500 / dragSpeed)); // 动画时间在200ms到500ms之间
+      const animationDuration = Math.max(200, Math.min(500, 500 / dragSpeed));
 
       this.setData({
         isBAnimating: true
       });
 
-      // 将当前图片滑出屏幕
+      // 将当前图片滑出屏幕，旋转角度加倍，飞得更远
+      const finalRotation = rotation * 2;
       this.setData({
-        translateX: distanceX * 2,
-        translateY: distanceY * 2,
-        opacity: 0
+        translateX: distanceX * 3,
+        translateY: distanceY * 3,
+        rotation: finalRotation,
+        opacity: 0,
+        showLikeLabel: false,
+        showDislikeLabel: false
       });
 
       // 记录滑出方向（角度）
-      const angle = Math.atan2(distanceY, distanceX); // 计算滑出角度
+      const angle = Math.atan2(distanceY, distanceX);
 
       // 延迟一段时间后，更新 currentBIndex 和 lastPicture
       setTimeout(() => {
         const lastPicture = [...this.data.lastPicture];
         lastPicture.push({
           index: currentBIndex,
-          translateX: distanceX * 2,
-          translateY: distanceY * 2,
+          translateX: distanceX * 3,
+          translateY: distanceY * 3,
+          rotation: finalRotation,
           opacity: 0,
-          angle: angle // 记录滑出角度
+          angle: angle
         });
 
         const newIndex = (currentBIndex + 1) % bImages.length;
@@ -1192,45 +1262,58 @@ Page({
           currentBIndex: newIndex,
           translateX: 0,
           translateY: 0,
+          rotation: 0,
           opacity: 1,
           isBAnimating: false,
           lastPicture: lastPicture,
-          draggingIndex: null // 重置拖拽索引
+          draggingIndex: null
         });
 
         console.log('被滑走的当前照片序号:', currentBIndex);
-        console.log('当前滑走的图片索引已添加到 lastPicture:', lastPicture);
-      }, animationDuration); // 使用动态调整的动画时间
+      }, animationDuration);
     } else {
       // 如果没有超过阈值，图片回到原位
       this.setData({
         translateX: 0,
         translateY: 0,
+        rotation: 0,
         opacity: 1,
-        draggingIndex: null // 重置拖拽索引
+        showLikeLabel: false,
+        showDislikeLabel: false,
+        draggingIndex: null
       });
     }
   },
 
   // 切换到上一张图片
   prevBImage() {
-    const { lastPicture, bImages } = this.data;
+    const { lastPicture, bImages, isBAnimating } = this.data;
+    
+    // 防止快速连续点击
+    if (isBAnimating) {
+      console.log('动画进行中，忽略操作');
+      return;
+    }
+    
     if (lastPicture.length > 0) {
-      const { index, translateX, translateY, angle } = lastPicture.pop(); // 取出滑出时的信息
+      // 添加震动反馈
+      wx.vibrateShort({
+        type: 'medium'
+      });
+      
+      const { index, translateX, translateY, angle } = lastPicture.pop();
 
       // 根据滑出角度计算滑入的初始位置
       const screenWidth = wx.getSystemInfoSync().windowWidth;
       const screenHeight = wx.getSystemInfoSync().windowHeight;
 
-      // 计算从屏幕外的初始位置，确保足够远
-      const distance = Math.max(screenWidth, screenHeight) * 2; // 增加距离
+      // 计算从屏幕外的初始位置
+      const distance = Math.max(screenWidth, screenHeight) * 2;
       const initialTranslateX = Math.cos(angle) * distance;
       const initialTranslateY = Math.sin(angle) * distance;
 
-      console.log('窗口宽度：',screenWidth,'窗口高度：',screenHeight);
       console.log('返回照片：', index, '从位置飞回:', initialTranslateX, initialTranslateY);
       
-      // 第一步：设置初始位置（屏幕外），禁用transition
       this.setData({
         restoringIndex: index,
         restoringTranslateX: initialTranslateX,
@@ -1240,31 +1323,31 @@ Page({
         isBAnimating: true
       });
 
-      // 第二步：等待一帧，确保初始位置已渲染
       setTimeout(() => {
-        // 启用transition
         this.setData({
           disableRestoringTransition: false
         });
         
-        // 第三步：再等待一帧，然后开始动画
         setTimeout(() => {
-          console.log('开始飞回动画');
           this.smoothAnimation(initialTranslateX, initialTranslateY, index);
         }, 20);
       }, 20);
     } else {
-      // 如果 lastPicture 为空，允许用户继续滑动照片
       console.log('lastPicture 为空，无法返回上一张照片');
+      
+      // 添加错误震动反馈
+      wx.vibrateShort({
+        type: 'heavy'
+      });
+      
       this.setData({
         isBAnimating: false,
-        showFirstImageMessage: true // 显示提示信息
+        showFirstImageMessage: true
       });
 
-      // 2秒后隐藏提示信息
       setTimeout(() => {
         this.setData({
-          showFirstImageMessage: false // 隐藏提示信息
+          showFirstImageMessage: false
         });
       }, 2000);
     }

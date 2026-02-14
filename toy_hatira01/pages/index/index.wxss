@@ -365,6 +365,52 @@ page {
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
   border-radius: 8px;/*圆角*/
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);/*阴影*/
+  transform-origin: center center; /* 设置旋转中心点 */
+  will-change: transform, opacity; /* 启用GPU加速 */
+}
+
+/* 方向标签样式 */
+.direction-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 20;
+  animation: labelPulse 0.3s ease-out;
+  pointer-events: none;
+}
+
+.like-label {
+  left: 30px;
+  background: rgba(76, 217, 100, 0.9);
+  color: white;
+  border: 3px solid #4CD964;
+  transform: translateY(-50%) rotate(-15deg);
+}
+
+.dislike-label {
+  right: 30px;
+  background: rgba(255, 59, 48, 0.9);
+  color: white;
+  border: 3px solid #FF3B30;
+  transform: translateY(-50%) rotate(15deg);
+}
+
+@keyframes labelPulse {
+  0% {
+    transform: translateY(-50%) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-50%) scale(1.1);
+  }
+  100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
 }
 
 /* 左侧礼物列表样式 */
@@ -389,6 +435,20 @@ page {
   background-color: transparent; /* 透明背景 */
   overflow: hidden; /* 隐藏超出部分 */
   border-radius: 5px; /* 添加圆角 */
+}
+
+/* 完全移除滚动条 */
+.b-left-gift-area::-webkit-scrollbar,
+.b-right-gift-area::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+.b-left-gift-area,
+.b-right-gift-area {
+  -ms-overflow-style: none !important; /* IE和Edge */
+  scrollbar-width: none !important; /* Firefox */
 }
 
 /*礼物动画*/
