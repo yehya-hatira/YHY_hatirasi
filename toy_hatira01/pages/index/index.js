@@ -345,6 +345,8 @@ Page({
       this.chooseBImage(); // 通过 add-key-circle 上传图片
     } else if (key === 'b0') {
       this.likeCurrentImage(); // 点赞当前图片
+    } else if (key === 'b1') {
+      this.downloadCurrentImage(); // 下载当前图片
     } else if (key === 'func') {
               if (this.data.showFuncKeys) {
                   // 如果已经显示，依次收回每个键
@@ -1171,6 +1173,87 @@ Page({
     const isLiked = likedImages.includes(currentBIndex);
     this.setData({ isCurrentImageLiked: isLiked });
     console.log('更新点赞状态 - 当前索引:', currentBIndex, '是否点赞:', isLiked);
+  },
+
+  // 下载当前图片功能
+  downloadCurrentImage: function() {
+    const { currentBIndex, bImages } = this.data;
+    
+    console.log('准备下载图片，当前索引:', currentBIndex);
+    console.log('图片总数:', bImages.length);
+    
+    if (bImages.length === 0) {
+      wx.showToast({
+        title: '没有可下载的图片',
+        icon: 'none'
+      });
+      return;
+    }
+
+    const currentImage = bImages[currentBIndex];
+    
+    if (!currentImage) {
+      wx.showToast({
+        title: '图片不存在',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 添加震动反馈
+    wx.vibrateShort({
+      type: 'medium'
+    });
+
+    // 显示加载提示
+    wx.showLoading({
+      title: '下载中...',
+      mask: true
+    });
+
+    // 保存图片到相册
+    wx.saveImageToPhotosAlbum({
+      filePath: currentImage,
+      success: (res) => {
+        wx.hideLoading();
+        wx.showToast({
+          title: '下载成功',
+          icon: 'success',
+          duration: 1500
+        });
+        console.log('图片下载成功:', currentImage);
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        console.error('图片下载失败:', err);
+        
+        // 如果是权限问题，引导用户开启权限
+        if (err.errMsg.indexOf('auth') !== -1) {
+          wx.showModal({
+            title: '提示',
+            content: '需要您授权保存图片到相册',
+            success: (modalRes) => {
+              if (modalRes.confirm) {
+                wx.openSetting({
+                  success: (settingRes) => {
+                    if (settingRes.authSetting['scope.writePhotosAlbum']) {
+                      // 用户授权后重新下载
+                      this.downloadCurrentImage();
+                    }
+                  }
+                });
+              }
+            }
+          });
+        } else {
+          wx.showToast({
+            title: '下载失败',
+            icon: 'none',
+            duration: 1500
+          });
+        }
+      }
+    });
   },
 
   // 添加图片到 .b-photo-area
