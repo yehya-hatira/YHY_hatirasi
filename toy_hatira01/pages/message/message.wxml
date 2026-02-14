@@ -12,7 +12,7 @@
         <block wx:for="{{notifications}}" wx:key="index">
           <view class="notification-item">
             <text class="notification-text">
-              {{item.sender}} 给{{item.receiver}} 送了 {{item.giftName}}
+              {{item.displayText}}
             </text>
             <text class="timestamp">{{item.timestamp}}</text>
           </view>

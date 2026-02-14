@@ -341,7 +341,9 @@ Page({
       this.prevBImage(); // 直接调用，不要提前设置 isBAnimating
     } else if (key === 'add') {
       this.chooseBImage(); // 通过 add-key-circle 上传图片
-    }else if (key === 'func') {
+    } else if (key === 'b0') {
+      this.likeCurrentImage(); // 点赞当前图片
+    } else if (key === 'func') {
               if (this.data.showFuncKeys) {
                   // 如果已经显示，依次收回每个键
                   this.hideFuncKeysSequentially();
@@ -669,7 +671,7 @@ Page({
       this.setData({ isLeftSendActive: true }); // 激活左侧发送按钮
       // 模拟发送礼物
       console.log('发送左侧礼物:', selectedGift.name);
-      this.sendGiftNotification('用户B', this.data.currentReceiver, selectedGift.name);
+      // 删除这里的 sendGiftNotification 调用，避免重复
       this.playAnimation(selectedGift, 'left'); // 明确指定左侧
 
       const leftGifts = this.data.leftGifts.map(item => {
@@ -703,8 +705,8 @@ Page({
 
       // 模拟发送礼物
       console.log('发送右侧礼物:', selectedGift.name);
-        this.sendGiftNotification('用户B', this.data.currentReceiver, selectedGift.name);
-        this.playAnimation(selectedGift, 'right'); // 明确指定右侧
+      // 删除这里的 sendGiftNotification 调用，避免重复
+      this.playAnimation(selectedGift, 'right'); // 明确指定右侧
       // 重置右侧礼物选中状态和发送按钮状态
       const rightGifts = this.data.rightGifts.map(item => {
         item.selected = false;
@@ -1077,24 +1079,49 @@ Page({
     });
   },
 
-  // 在 Page 对象中添加以下方法
-  sendGiftNotification: function(sender, receiver, giftName) {
+  // 点赞图片功能
+  likeCurrentImage: function() {
+    const { currentBIndex, bImages } = this.data;
+    
+    if (bImages.length === 0) {
+      wx.showToast({
+        title: '没有可点赞的图片',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 添加震动反馈
+    wx.vibrateShort({
+      type: 'medium'
+    });
+
+    // 创建点赞通知
+    const now = new Date();
     const notification = {
-      sender: sender,
-      receiver: receiver,
-      giftName: giftName,
-      timestamp: new Date().toISOString() // 使用 ISO 格式
+      type: 'like', // 标记为点赞类型
+      sender: 'Yeheya',
+      receiver: this.data.currentReceiver,
+      imageIndex: currentBIndex + 1, // 图片序号从1开始
+      timestamp: now.toISOString()
     };
 
-    // 通过全局事件总线或其他方式将通知传递给 message 页面
-    this.triggerEvent('sendGiftNotification', notification);
-
-    // 更新未读消息计数
+    // 存入全局队列
     const app = getApp();
-    app.globalData.unreadMsgCount += 1; // 增加未读消息计数
-    this.setData({
-        myMsgBadge: app.globalData.unreadMsgCount // 更新当前页面的未读消息计数
+    app.globalData.notifications.push(notification);
+    app.globalData.unreadMsgCount += 1;
+
+    // 更新页面显示的未读红点
+    this.setData({ myMsgBadge: app.globalData.unreadMsgCount });
+
+    // 显示点赞成功提示
+    wx.showToast({
+      title: '点赞成功',
+      icon: 'success',
+      duration: 1500
     });
+
+    console.log('点赞了第', currentBIndex + 1, '张图片');
   },
 
   // 添加图片到 .b-photo-area

@@ -8,11 +8,25 @@ Page({
     const app = getApp();
     const rawNotifications = app.globalData.notifications;
 
-    // 直接使用全局的 notifications，而不是清空它
-    const formattedNotifications = rawNotifications.map(notification => ({
-      ...notification,
-      timestamp: this.formatTimestamp(notification.timestamp)
-    }));
+    // 直接使用全局的 notifications，格式化时间戳并生成显示文本
+    const formattedNotifications = rawNotifications.map(notification => {
+      let displayText = '';
+      
+      // 根据通知类型生成不同的显示文本
+      if (notification.type === 'like') {
+        // 点赞消息
+        displayText = `${notification.sender} 赞了${notification.receiver} 的第${notification.imageIndex}张图片`;
+      } else {
+        // 礼物消息
+        displayText = `${notification.sender} 给${notification.receiver} 送了 ${notification.giftName}`;
+      }
+      
+      return {
+        ...notification,
+        displayText: displayText,
+        timestamp: this.formatTimestamp(notification.timestamp)
+      };
+    });
     
     this.setData({ 
       notifications: formattedNotifications,
