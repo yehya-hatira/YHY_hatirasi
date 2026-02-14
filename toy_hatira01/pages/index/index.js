@@ -152,7 +152,8 @@ Page({
     rightGiftVisible: true, // 控制右侧礼物区的显示
     isGifting: false, // 控制动画状态
 
-    currentReceiver: 'zulmira' // 当前接收者
+    currentReceiver: 'zulmira', // 当前接收者
+    likedImages: [] // 记录被点赞的图片索引数组
   },
   onLoad: function () {
     console.log('页面加载');
@@ -1081,7 +1082,11 @@ Page({
 
   // 点赞图片功能
   likeCurrentImage: function() {
-    const { currentBIndex, bImages } = this.data;
+    const { currentBIndex, bImages, likedImages } = this.data;
+    
+    console.log('当前图片索引:', currentBIndex);
+    console.log('已点赞图片列表:', likedImages);
+    console.log('图片总数:', bImages.length);
     
     if (bImages.length === 0) {
       wx.showToast({
@@ -1091,10 +1096,25 @@ Page({
       return;
     }
 
+    // 检查当前图片是否已经点赞
+    if (likedImages.includes(currentBIndex)) {
+      wx.showToast({
+        title: '已经点赞过了',
+        icon: 'none'
+      });
+      return;
+    }
+
     // 添加震动反馈
     wx.vibrateShort({
       type: 'medium'
     });
+
+    // 将当前图片索引添加到点赞列表
+    const updatedLikedImages = [...likedImages, currentBIndex];
+    this.setData({ likedImages: updatedLikedImages });
+    
+    console.log('点赞后的列表:', updatedLikedImages);
 
     // 创建点赞通知
     const now = new Date();

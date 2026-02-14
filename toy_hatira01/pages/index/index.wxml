@@ -112,7 +112,13 @@
   <!-- 添加上传图片区域 -->
   <view class="b-photo-area">
     <block wx:for="{{bImages}}" wx:key="*this">
-      <image src="{{item}}" mode="aspectFill" class="uploaded-image" data-index="{{index}}" bindtouchstart="onImageTouchStart" bindtouchmove="onImageTouchMove" bindtouchend="onImageTouchEnd" style="z-index: {{index === restoringIndex ? 10 : (index === currentBIndex ? 7 : (index === (currentBIndex + 1) % bImages.length ? 6 : (index === (currentBIndex + 2) % bImages.length ? 5 : 1)))}}; height: {{index === restoringIndex ? 340 : (index === currentBIndex ? 340 : (index === (currentBIndex + 1) % bImages.length ? 370 : 400))}}px; opacity: {{index === draggingIndex ? opacity : (index === restoringIndex ? restoringOpacity : 1)}}; transform: translate({{index === currentBIndex ? translateX : (index === restoringIndex ? restoringTranslateX : 0)}}px, {{index === currentBIndex ? translateY : (index === restoringIndex ? restoringTranslateY : 0)}}px); transition: {{index === currentBIndex ? 'transform 0.3s ease-out, opacity 0.3s ease-out' : (index === restoringIndex ? (disableRestoringTransition ? 'none' : 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease-out') : 'none')}};"></image>
+      <view class="image-wrapper" style="z-index: {{index === restoringIndex ? 10 : (index === currentBIndex ? 7 : (index === (currentBIndex + 1) % bImages.length ? 6 : (index === (currentBIndex + 2) % bImages.length ? 5 : 1)))}}; display: {{index === currentBIndex || index === restoringIndex || index === (currentBIndex + 1) % bImages.length || index === (currentBIndex + 2) % bImages.length ? 'block' : 'none'}};">
+        <image src="{{item}}" mode="aspectFill" class="uploaded-image" data-index="{{index}}" bindtouchstart="onImageTouchStart" bindtouchmove="onImageTouchMove" bindtouchend="onImageTouchEnd" style="height: {{index === restoringIndex ? 340 : (index === currentBIndex ? 340 : (index === (currentBIndex + 1) % bImages.length ? 370 : 400))}}px; opacity: {{index === draggingIndex ? opacity : (index === restoringIndex ? restoringOpacity : 1)}}; transform: translate({{index === currentBIndex ? translateX : (index === restoringIndex ? restoringTranslateX : 0)}}px, {{index === currentBIndex ? translateY : (index === restoringIndex ? restoringTranslateY : 0)}}px); transition: {{index === currentBIndex ? 'transform 0.3s ease-out, opacity 0.3s ease-out' : (index === restoringIndex ? (disableRestoringTransition ? 'none' : 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease-out') : 'none')}};"></image>
+        <!-- 被点赞图片的小爱心标识 - 只在当前图片且被点赞时显示 -->
+        <view class="liked-heart-badge" wx:if="{{index === currentBIndex && likedImages.indexOf(index) !== -1}}">
+          <image class="heart-icon" src="/Img/icons/heart-red.svg" mode="aspectFit"></image>
+        </view>
+      </view>
     </block>
     <view class="add-image-b" wx:if="{{showAddBImage}}" bindtap="chooseBImage">+</view>
   </view>

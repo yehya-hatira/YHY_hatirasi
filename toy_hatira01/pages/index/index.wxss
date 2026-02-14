@@ -647,6 +647,54 @@ page {
 
 /* 如果需要，可以在这里添加弹出和收回的动画样式 */
 
+/* 图片包装器样式 */
+.image-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  pointer-events: none; /* 让包装器不阻挡事件 */
+}
+
+.image-wrapper .uploaded-image {
+  pointer-events: auto; /* 图片可以接收事件 */
+}
+
+/* 被点赞图片的小爱心标识 */
+.liked-heart-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 1px;
+  width: 32px;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: heartBeat 0.5s ease-in-out;
+  pointer-events: none; /* 爱心不阻挡事件 */
+}
+
+.liked-heart-badge .heart-icon {
+  width: 32px;
+  height: 32px;
+}
+
+/* 爱心跳动动画 */
+@keyframes heartBeat {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .a-left-gift-area,.a-right-gift-area,.b-left-gift-area, .b-right-gift-area,.b-l-send-rectangle,.b-r-send-rectangle {
   transition: transform 0.5s ease; /* 动画过渡效果，增加到0.5s */
 }
