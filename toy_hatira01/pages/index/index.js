@@ -153,7 +153,8 @@ Page({
     isGifting: false, // 控制动画状态
 
     currentReceiver: 'zulmira', // 当前接收者
-    likedImages: [] // 记录被点赞的图片索引数组
+    likedImages: [], // 记录被点赞的图片索引数组
+    isCurrentImageLiked: false // 当前图片是否被点赞
   },
   onLoad: function () {
     console.log('页面加载');
@@ -1080,7 +1081,7 @@ Page({
     });
   },
 
-  // 点赞图片功能
+  // 点赞/取消点赞图片功能
   likeCurrentImage: function() {
     const { currentBIndex, bImages, likedImages } = this.data;
     
@@ -1098,50 +1099,78 @@ Page({
 
     // 检查当前图片是否已经点赞
     if (likedImages.includes(currentBIndex)) {
-      wx.showToast({
-        title: '已经点赞过了',
-        icon: 'none'
+      // 已点赞，执行取消点赞操作
+      wx.vibrateShort({
+        type: 'light'
       });
-      return;
+
+      // 从点赞列表中移除当前图片索引
+      const updatedLikedImages = likedImages.filter(index => index !== currentBIndex);
+      this.setData({ 
+        likedImages: updatedLikedImages,
+        isCurrentImageLiked: false // 更新当前图片点赞状态
+      });
+      
+      console.log('取消点赞后的列表:', updatedLikedImages);
+
+      // 显示取消点赞提示
+      wx.showToast({
+        title: '已取消点赞',
+        icon: 'none',
+        duration: 1500
+      });
+
+      console.log('取消点赞第', currentBIndex + 1, '张图片');
+    } else {
+      // 未点赞，执行点赞操作
+      wx.vibrateShort({
+        type: 'medium'
+      });
+
+      // 将当前图片索引添加到点赞列表
+      const updatedLikedImages = [...likedImages, currentBIndex];
+      this.setData({ 
+        likedImages: updatedLikedImages,
+        isCurrentImageLiked: true // 更新当前图片点赞状态
+      });
+      
+      console.log('点赞后的列表:', updatedLikedImages);
+
+      // 创建点赞通知
+      const now = new Date();
+      const notification = {
+        type: 'like', // 标记为点赞类型
+        sender: 'Yeheya',
+        receiver: this.data.currentReceiver,
+        imageIndex: currentBIndex + 1, // 图片序号从1开始
+        timestamp: now.toISOString()
+      };
+
+      // 存入全局队列
+      const app = getApp();
+      app.globalData.notifications.push(notification);
+      app.globalData.unreadMsgCount += 1;
+
+      // 更新页面显示的未读红点
+      this.setData({ myMsgBadge: app.globalData.unreadMsgCount });
+
+      // 显示点赞成功提示
+      wx.showToast({
+        title: '点赞成功',
+        icon: 'success',
+        duration: 1500
+      });
+
+      console.log('点赞了第', currentBIndex + 1, '张图片');
     }
+  },
 
-    // 添加震动反馈
-    wx.vibrateShort({
-      type: 'medium'
-    });
-
-    // 将当前图片索引添加到点赞列表
-    const updatedLikedImages = [...likedImages, currentBIndex];
-    this.setData({ likedImages: updatedLikedImages });
-    
-    console.log('点赞后的列表:', updatedLikedImages);
-
-    // 创建点赞通知
-    const now = new Date();
-    const notification = {
-      type: 'like', // 标记为点赞类型
-      sender: 'Yeheya',
-      receiver: this.data.currentReceiver,
-      imageIndex: currentBIndex + 1, // 图片序号从1开始
-      timestamp: now.toISOString()
-    };
-
-    // 存入全局队列
-    const app = getApp();
-    app.globalData.notifications.push(notification);
-    app.globalData.unreadMsgCount += 1;
-
-    // 更新页面显示的未读红点
-    this.setData({ myMsgBadge: app.globalData.unreadMsgCount });
-
-    // 显示点赞成功提示
-    wx.showToast({
-      title: '点赞成功',
-      icon: 'success',
-      duration: 1500
-    });
-
-    console.log('点赞了第', currentBIndex + 1, '张图片');
+  // 更新当前图片点赞状态
+  updateLikedStatus: function() {
+    const { currentBIndex, likedImages } = this.data;
+    const isLiked = likedImages.includes(currentBIndex);
+    this.setData({ isCurrentImageLiked: isLiked });
+    console.log('更新点赞状态 - 当前索引:', currentBIndex, '是否点赞:', isLiked);
   },
 
   // 添加图片到 .b-photo-area
@@ -1181,6 +1210,8 @@ Page({
       disableRestoringTransition: false,
       isBAnimating: false
     });
+    // 更新点赞状态
+    this.updateLikedStatus();
   },
 
 
@@ -1201,6 +1232,8 @@ Page({
         that.setData({
           bImages: newbImages,
         });
+        // 更新点赞状态
+        that.updateLikedStatus();
       }
     });
   },
@@ -1315,6 +1348,9 @@ Page({
           lastPicture: lastPicture,
           draggingIndex: null
         });
+
+        // 更新点赞状态
+        this.updateLikedStatus();
 
         console.log('被滑走的当前照片序号:', currentBIndex);
       }, animationDuration);
