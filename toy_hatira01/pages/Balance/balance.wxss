@@ -3,7 +3,6 @@ page {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #673ab7, #9c27b0);
   overflow: hidden; /* 禁用滚动 */
 }
 .scrollarea {
@@ -21,6 +20,10 @@ page {
   align-items: center;
   justify-content: center;
   padding: 40rpx;
+  background: linear-gradient(180deg, #673ab7, #9c27b0);
+  background-size: 100% 200%;
+  background-position: center 0%;
+  transition: background-position 0.3s ease-out;
 }
 
 /* 余额卡片 */

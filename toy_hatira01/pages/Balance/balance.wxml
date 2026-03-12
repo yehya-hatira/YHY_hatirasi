@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container" style="background-position: center {{backgroundPositionY}}%">
   <!-- 余额卡片 -->
   <view class="balance-card">
     <text class="balance-label">当前余额</text>
@@ -45,4 +45,4 @@
   </view>
 
   <text class="balance-tip">提示：余额变动会同步到主页的「me」菜单中。</text>
-</view> 
+</view>
