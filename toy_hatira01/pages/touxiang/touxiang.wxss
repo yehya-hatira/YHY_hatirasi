@@ -4,7 +4,21 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(180deg, #673ab7, #9c27b0);
+  
+  /* CSS 变量定义 */
+  --stop-position: 50%;
+  --transition-width: 60%;
+  
+  /* 核心渐变：柔和过渡 */
+  background: linear-gradient(
+    180deg,
+    #673ab7 0%,
+    #673ab7 calc(var(--stop-position) - var(--transition-width) / 2),
+    #9c27b0 calc(var(--stop-position) + var(--transition-width) / 2),
+    #9c27b0 100%
+  );
+  
+  transition: background 0.1s linear;
 }
 
 .large-avatar {

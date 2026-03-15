@@ -1,5 +1,5 @@
 <!-- d:\Project_Tools\Tencent\1hunji\new02\pages\index\index.wxml -->
-<view class="container">
+<view class="container" style="{{containerStyle}}">
   <!-- 语言选择框 -->
   <view class="language-selector">
     <view class="language-box" bindtap="toggleLanguageList">

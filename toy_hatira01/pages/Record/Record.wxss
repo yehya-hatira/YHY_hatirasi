@@ -3,7 +3,6 @@ page {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #673ab7, #9c27b0);
   overflow: hidden; /* 禁用滚动 */
 }
 .scrollarea {
@@ -16,8 +15,21 @@ page {
   height: 100vh;
   position: relative;
   overflow: hidden; /* 禁用滚动 */
-  /*background: #f0f0f0;*/
-  /*background: linear-gradient(180deg, #673ab7, #9c27b0);*/ /*深紫色渐变背景 */
+  
+  /* CSS 变量定义 */
+  --stop-position: 50%;
+  --transition-width: 60%;
+  
+  /* 核心渐变：柔和过渡 */
+  background: linear-gradient(
+    180deg,
+    #673ab7 0%,
+    #673ab7 calc(var(--stop-position) - var(--transition-width) / 2),
+    #9c27b0 calc(var(--stop-position) + var(--transition-width) / 2),
+    #9c27b0 100%
+  );
+  
+  transition: background 0.1s linear;
 }
  
  /* 音乐选择框样式 */

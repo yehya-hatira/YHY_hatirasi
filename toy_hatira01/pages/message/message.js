@@ -3,8 +3,11 @@ Page({
     showcurrenttime: false, // 显示当前时间
     notifications: [], // 存储通知信息
     myMsgBadge: 0, // 未读消息计数（用于页面右上角小红点）
+    containerStyle: '',
   },
   onLoad: function() {
+    this.getUserBalance();
+    this.updateGradient();
     const app = getApp();
     const rawNotifications = app.globalData.notifications;
 
@@ -90,6 +93,26 @@ Page({
     // 进入页面时重置全局未读数
     const app = getApp();
     app.globalData.unreadMsgCount = 0;
+    this.getUserBalance();
+    this.updateGradient();
+  },
+
+  // 获取用户余额（从全局读取）
+  getUserBalance: function() {
+    const app = getApp();
+    const savedBalance = wx.getStorageSync('userBalance');
+    if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
+      app.globalData.userBalance = savedBalance;
+    }
+  },
+
+  // 更新渐变背景
+  updateGradient: function() {
+    const app = getApp();
+    const balance = app.globalData.userBalance;
+    const percent = 95 - (balance / 1000) * 85;
+    this.setData({
+      containerStyle: `--stop-position: ${percent}%`
+    });
   }
-  // 其他功能函数
-}); 
+});

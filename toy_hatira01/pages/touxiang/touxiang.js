@@ -5,7 +5,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: {}
+    userInfo: {},
+    containerStyle: '',
   },
 
   /**
@@ -13,6 +14,8 @@ Page({
    */
   onLoad(options) {
     this.syncUserInfo();
+    this.getUserBalance();
+    this.updateGradient();
   },
 
   /**
@@ -27,6 +30,8 @@ Page({
    */
   onShow() {
     this.syncUserInfo();
+    this.getUserBalance();
+    this.updateGradient();
   },
 
   /**
@@ -161,6 +166,25 @@ Page({
           icon: 'none'
         });
       }
+    });
+  },
+
+  // 获取用户余额（从全局读取）
+  getUserBalance: function() {
+    const app = getApp();
+    const savedBalance = wx.getStorageSync('userBalance');
+    if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
+      app.globalData.userBalance = savedBalance;
+    }
+  },
+
+  // 更新渐变背景
+  updateGradient: function() {
+    const app = getApp();
+    const balance = app.globalData.userBalance;
+    const percent = 95 - (balance / 1000) * 85;
+    this.setData({
+      containerStyle: `--stop-position: ${percent}%`
     });
   }
 })

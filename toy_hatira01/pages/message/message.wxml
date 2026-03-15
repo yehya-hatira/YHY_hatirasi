@@ -1,4 +1,4 @@
-<view class="container">  
+<view class="container" style="{{containerStyle}}">  
   <!-- 头部标题 - 固定在顶部 -->
   <view class="msg-header">
     <text class="msg-title">礼物消息</text>

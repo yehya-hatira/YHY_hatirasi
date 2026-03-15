@@ -5,14 +5,15 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    containerStyle: '',
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    this.getUserBalance();
+    this.updateGradient();
   },
 
   /**
@@ -26,7 +27,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.getUserBalance();
+    this.updateGradient();
   },
 
   /**
@@ -62,5 +64,24 @@ Page({
    */
   onShareAppMessage() {
 
+  },
+
+  // 获取用户余额（从全局读取）
+  getUserBalance: function() {
+    const app = getApp();
+    const savedBalance = wx.getStorageSync('userBalance');
+    if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
+      app.globalData.userBalance = savedBalance;
+    }
+  },
+
+  // 更新渐变背景
+  updateGradient: function() {
+    const app = getApp();
+    const balance = app.globalData.userBalance;
+    const percent = 95 - (balance / 1000) * 85;
+    this.setData({
+      containerStyle: `--stop-position: ${percent}%`
+    });
   }
 })

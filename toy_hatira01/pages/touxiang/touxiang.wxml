@@ -1,5 +1,5 @@
 <!--pages/me/me.wxml-->
-<view class="container">
+<view class="container" style="{{containerStyle}}">
   <image class="large-avatar" src="{{userInfo.avatar}}" mode="aspectFill" binderror="handleImageError" />
   <text class="three-dots" bindtap="showOptions">⋅⋅⋅</text>
 </view>

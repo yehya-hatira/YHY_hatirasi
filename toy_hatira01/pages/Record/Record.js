@@ -41,6 +41,7 @@ Page({
     restoringOpacity: 1, // 恢复图片的透明度
     restoringAnimationType: 'smooth', // 恢复动画类型
     disableRestoringTransition: false, // 是否禁用恢复动画的transition
+    containerStyle: '',
 
     i18n: {
       ug: {
@@ -132,6 +133,8 @@ Page({
     this.audioContext = wx.createInnerAudioContext(); // 确保初始化
     this.updatePageText(); // 初始化页面文本
     this.startAutoPlay();//启动自动轮播
+    this.getUserBalance();
+    this.updateGradient();
   },
   onUnload: function() {
     this.stopAutoPlay();//停止自动轮播
@@ -614,5 +617,24 @@ Page({
         });
       }, 2000);
     }
+  },
+
+  // 获取用户余额（从全局读取）
+  getUserBalance: function() {
+    const app = getApp();
+    const savedBalance = wx.getStorageSync('userBalance');
+    if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
+      app.globalData.userBalance = savedBalance;
+    }
+  },
+
+  // 更新渐变背景
+  updateGradient: function() {
+    const app = getApp();
+    const balance = app.globalData.userBalance;
+    const percent = 95 - (balance / 1000) * 85;
+    this.setData({
+      containerStyle: `--stop-position: ${percent}%`
+    });
   }
 });

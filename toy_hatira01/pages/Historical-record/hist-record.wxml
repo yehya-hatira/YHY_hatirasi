@@ -1,5 +1,5 @@
 <!--pages/Historical-record/hist-record.wxml-->
-<view class="container">
+<view class="container" style="{{containerStyle}}">
   <view class="empty-state">
     <view class="empty-icon">⌛</view>
     <text class="empty-title">历史记录暂时为空</text>

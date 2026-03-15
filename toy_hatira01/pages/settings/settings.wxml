@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container" style="{{containerStyle}}">
   <!-- 修改用户信息头部分 -->
   <view class="user-header" bindtap="onAvatarTap">
     <image class="avatar" src="{{userInfo.avatar}}" mode="aspectFill"/>

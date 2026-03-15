@@ -1,6 +1,5 @@
 Page({
   data: {
-    userBalance: 100, // 当前余额
     balanceRecords: [], // 余额流水记录
     showHistory: true, // 是否展示流水区域
     containerStyle: '', // 容器样式（CSS 变量）
@@ -12,25 +11,21 @@ Page({
     this.loadBalanceRecords();
     this.updateGradient();
   },
-  // 获取用户余额（与全局 / 本地存储同步）
+  // 获取用户余额（从全局读取）
   getUserBalance: function() {
     console.log('获取用户余额...');
     const app = getApp();
     const savedBalance = wx.getStorageSync('userBalance');
-    let balance = 100;
     if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
-      balance = savedBalance;
-    } else if (typeof app.globalData.userBalance === 'number') {
-      balance = app.globalData.userBalance;
+      app.globalData.userBalance = savedBalance;
     }
-    this.setData({ userBalance: balance });
-    app.globalData.userBalance = balance;
-    console.log('当前用户余额:', this.data.userBalance);
+    console.log('当前用户余额:', app.globalData.userBalance);
   },
 
   // 更新渐变背景
   updateGradient: function() {
-    const balance = this.data.userBalance;
+    const app = getApp();
+    const balance = app.globalData.userBalance;
     // 映射逻辑：0->80%, 500->50%, 1000->20%
     const percent = 95 - (balance / 1000) * 85;
     
@@ -42,14 +37,13 @@ Page({
     console.log('背景位置更新:', percent + '%, 当前余额:', balance);
   },
 
-  // 更新用户余额（与全局 / 本地存储同步）
+  // 更新用户余额（只更新全局数据和本地存储）
   updateUserBalance: function(amount) {
     const app = getApp();
-    const newBalance = this.data.userBalance + amount;
-    this.setData({ userBalance: newBalance });
+    const newBalance = app.globalData.userBalance + amount;
     app.globalData.userBalance = newBalance;
     wx.setStorageSync('userBalance', newBalance);
-    console.log('更新后用户余额:', this.data.userBalance); // 打印更新后的余额
+    console.log('更新后用户余额:', newBalance);
     this.updateGradient();
   },
 
@@ -70,7 +64,7 @@ Page({
     const record = {
       type, // 'recharge' | 'consume'
       amount,
-      balanceAfter: this.data.userBalance,
+      balanceAfter: app.globalData.userBalance,
       remark: remark || '',
       timestamp: now.toISOString()
     };
@@ -117,16 +111,16 @@ Page({
       signType: 'MD5',
       paySign: '签名',
       success: (res) => {
-        this.updateUserBalance(100); // 假设充值100币
-        console.log('充值成功:', this.data.userBalance); // 打印充值后的余额
+        this.updateUserBalance(100); // 充值100币
         this.addBalanceRecord('recharge', 100, '充值');
+        console.log('充值成功，当前余额:', getApp().globalData.userBalance);
       },
       fail: (err) => {
         wx.showToast({
           title: '支付失败',
           icon: 'none'
         });
-        console.log('支付失败:', err); // 打印支付失败的信息
+        console.log('支付失败:', err);
       }
     });
   }
