@@ -1,5 +1,6 @@
 Page({
   data: {
+    userBalance: 0, // 当前余额（用于页面显示）
     balanceRecords: [], // 余额流水记录
     showHistory: true, // 是否展示流水区域
     containerStyle: '', // 容器样式（CSS 变量）
@@ -11,7 +12,7 @@ Page({
     this.loadBalanceRecords();
     this.updateGradient();
   },
-  // 获取用户余额（从全局读取）
+  // 获取用户余额（从全局读取，同时更新页面显示）
   getUserBalance: function() {
     console.log('获取用户余额...');
     const app = getApp();
@@ -19,6 +20,8 @@ Page({
     if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
       app.globalData.userBalance = savedBalance;
     }
+    // 同时更新页面 data 用于显示
+    this.setData({ userBalance: app.globalData.userBalance });
     console.log('当前用户余额:', app.globalData.userBalance);
   },
 
@@ -37,12 +40,14 @@ Page({
     console.log('背景位置更新:', percent + '%, 当前余额:', balance);
   },
 
-  // 更新用户余额（只更新全局数据和本地存储）
+  // 更新用户余额（只更新全局数据和本地存储，同时更新页面显示）
   updateUserBalance: function(amount) {
     const app = getApp();
     const newBalance = app.globalData.userBalance + amount;
     app.globalData.userBalance = newBalance;
     wx.setStorageSync('userBalance', newBalance);
+    // 同时更新页面 data 用于显示
+    this.setData({ userBalance: newBalance });
     console.log('更新后用户余额:', newBalance);
     this.updateGradient();
   },
