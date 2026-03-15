@@ -767,8 +767,11 @@ Page({
         app.globalData.notifications.push(notification);
         app.globalData.unreadMsgCount += 1;
 
-        // 更新页面显示的未读红点
-        _this.setData({ myMsgBadge: app.globalData.unreadMsgCount });
+        // 更新页面显示的未读红点和余额红点
+        _this.setData({ 
+          myMsgBadge: app.globalData.unreadMsgCount,
+          myBalanceBadge: _this.data.myBalanceBadge + 1  // 增加余额变动提醒
+        });
 
         // 打印状态
         // console.log('isLeftSendActive:', _this.data.isLeftSendActive);
