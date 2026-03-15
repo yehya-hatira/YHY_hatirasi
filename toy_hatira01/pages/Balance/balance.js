@@ -3,15 +3,14 @@ Page({
     userBalance: 100, // 当前余额
     balanceRecords: [], // 余额流水记录
     showHistory: true, // 是否展示流水区域
-    backgroundPositionY: 0, // 背景位置百分比
+    containerStyle: '', // 容器样式（CSS 变量）
   },
   onLoad: function() {
     console.log('余额页面加载');
     console.log('页面加载完成');
     this.getUserBalance();
     this.loadBalanceRecords();
-    this.updateBackgroundPosition();
-    this.updateNavigationBarColor();
+    this.updateGradient();
   },
   // 获取用户余额（与全局 / 本地存储同步）
   getUserBalance: function() {
@@ -27,59 +26,20 @@ Page({
     this.setData({ userBalance: balance });
     app.globalData.userBalance = balance;
     console.log('当前用户余额:', this.data.userBalance);
-    this.updateBackgroundPosition();
   },
 
-  // 更新背景位置根据余额
-  updateBackgroundPosition: function() {
+  // 更新渐变背景
+  updateGradient: function() {
     const balance = this.data.userBalance;
-    // 计算进度 (0-1000币 映射到 0-1)
-    let progress = balance / 1000;
-    // 限制在 0-1 之间
-    progress = Math.max(0, Math.min(1, progress));
+    // 映射逻辑：0->80%, 500->50%, 1000->20%
+    const percent = 95 - (balance / 1000) * 85;
     
-    // 计算背景位置百分比
-    // 因为 background-size 是 100% 200%，初始位置是 0%
-    // progress 0 = 0% (显示深紫色 #673ab7，渐变的上半部分)
-    // progress 0.5 = 50% (显示中立，渐变的中间)
-    // progress 1 = 100% (显示浅紫色 #9c27b0，渐变的下半部分)
-    const positionY = progress * 100;
-    
-    this.setData({ backgroundPositionY: positionY });
-    console.log('余额:', balance, '进度:', progress, '背景位置:', positionY + '%');
-    
-    // 同时更新导航栏颜色
-    this.updateNavigationBarColor();
-  },
-
-  // 根据进度计算导航栏颜色
-  updateNavigationBarColor: function() {
-    const balance = this.data.userBalance;
-    let progress = balance / 1000;
-    progress = Math.max(0, Math.min(1, progress));
-    
-    // 颜色插值：从 #673ab7 到 #9c27b0
-    // 深紫色: R=103, G=58, B=183
-    // 浅紫色: R=156, G=39, B=176
-    const startR = 103, startG = 58, startB = 183;
-    const endR = 156, endG = 39, endB = 176;
-    
-    const r = Math.round(startR + (endR - startR) * progress);
-    const g = Math.round(startG + (endG - startG) * progress);
-    const b = Math.round(startB + (endB - startB) * progress);
-    
-    const navBarColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`.toUpperCase();
-    
-    wx.setNavigationBarColor({
-      frontColor: '#ffffff',
-      backgroundColor: navBarColor,
-      animation: {
-        duration: 300,
-        timingFunc: 'easeOut'
-      }
+    // 直接设置 CSS 变量
+    this.setData({
+      containerStyle: `--stop-position: ${percent}%`
     });
     
-    console.log('导航栏颜色更新:', navBarColor);
+    console.log('背景位置更新:', percent + '%, 当前余额:', balance);
   },
 
   // 更新用户余额（与全局 / 本地存储同步）
@@ -90,7 +50,7 @@ Page({
     app.globalData.userBalance = newBalance;
     wx.setStorageSync('userBalance', newBalance);
     console.log('更新后用户余额:', this.data.userBalance); // 打印更新后的余额
-    this.updateBackgroundPosition(); // 这会同时更新背景和导航栏
+    this.updateGradient();
   },
 
   // 加载余额流水
@@ -171,4 +131,4 @@ Page({
     });
   }
   // 其他功能函数
-}); 
+});
