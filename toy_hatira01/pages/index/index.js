@@ -656,6 +656,7 @@ Page({
 
   // 左侧发送礼物事件
   onSendLeftGift() {
+    if (!getApp().checkLogin("index")) return;
     const selectedGift = this.data.selectedLeftGift;
     if (selectedGift) {
       // 余额不足校验
@@ -689,6 +690,7 @@ Page({
 
   // 右侧发送礼物事件
   onSendRightGift() {
+    if (!getApp().checkLogin("index")) return;
     if (!this.data.isRightSendActive) return; // 如果没有选中礼物，直接返回
 
     const selectedGift = this.data.selectedRightGift;
@@ -1018,6 +1020,8 @@ Page({
   },
   // 处理 me-circle 点击事件
   handleMeCircleClick: function() {
+    // 点击 me 按鈕时需要登录
+    if (!getApp().checkLogin('index')) return;
     if (this.data.showMyKeys) {
       this.hideMyKeysSequentially();
       this.setData({ myMsgVisible: false }); // 隐藏 Msg 键时同时隐藏红点
