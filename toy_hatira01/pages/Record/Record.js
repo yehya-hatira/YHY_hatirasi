@@ -636,5 +636,12 @@ Page({
     this.setData({
       containerStyle: `--stop-position: ${percent}%`
     });
+  },
+
+  // 添加onShow生命周期函数，检查登录状态
+  onShow: function() {
+    if (!getApp().checkLogin("Record")) return;
+    this.getUserBalance();
+    this.updateGradient();
   }
 });

@@ -4,7 +4,8 @@ Page({
       {title: '我要记录', event: 'navigateToRecord'},
       {title: '历史记录', event: 'navigateToEditProfile'},
       {title: '绑定手机号', value: '188****1234', event: 'changePhone'},
-      {title: '账号注销', event: 'changePassword'}
+      {title: '账号注销', event: 'changePassword'},
+      {title: '退出登录', event: 'logout'} // 添加退出登录选项
     ],
     notifySettings: [
       {title: '礼物通知', type: 'gift', enabled: true},
@@ -14,6 +15,9 @@ Page({
   },
 
   onLoad() {
+    // 添加登录检查
+    if (!getApp().checkLogin("settings")) return;
+    
     this.loadUserInfo();
     this.getUserBalance();
     this.updateGradient();
@@ -72,12 +76,54 @@ Page({
     this.setData({ 'userInfo.avatar': savedAvatar });
     app.globalData.userInfo.avatar = savedAvatar;
   },
-  navigateToRecord() {
-    wx.navigateTo({ url: '/pages/Record/Record' });
+
+  // 处理账户设置项点击
+  handleAccountSettingTap(e) {
+    const event = e.currentTarget.dataset.event;
+    switch (event) {
+      case 'navigateToRecord':
+        wx.navigateTo({ url: '/pages/Record/Record' });
+        break;
+      case 'navigateToEditProfile':
+        wx.navigateTo({ url: '/pages/Historical-record/hist-record' });
+        break;
+      case 'changePhone':
+        wx.showToast({ title: '绑定手机号功能待开发', icon: 'none' });
+        break;
+      case 'changePassword':
+        wx.showModal({
+          title: '确认注销',
+          content: '确定要注销账号吗？这将清除所有本地数据。',
+          success: (res) => {
+            if (res.confirm) {
+              wx.clearStorageSync();
+              wx.reLaunch({ url: '/pages/login/login' });
+            }
+          }
+        });
+        break;
+      case 'logout': // 添加退出登录处理
+        this.handleLogout();
+        break;
+      default:
+        break;
+    }
   },
-  navigateToEditProfile() {
-    wx.navigateTo({ url: '/pages/Historical-record/hist-record' });
+
+  // 退出登录处理
+  handleLogout() {
+    wx.showModal({
+      title: '确认退出',
+      content: '确定要退出登录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          const app = getApp();
+          app.logout();
+        }
+      }
+    });
   },
+
   toggleNotify(e) {
     const type = e.currentTarget.dataset.type;
     const settings = this.data.notifySettings.map(item => {

@@ -6,6 +6,9 @@ Page({
     containerStyle: '',
   },
   onLoad: function() {
+    // 添加登录检查
+    if (!getApp().checkLogin("message")) return;
+    
     this.getUserBalance();
     this.updateGradient();
     const app = getApp();

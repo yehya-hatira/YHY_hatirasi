@@ -13,6 +13,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    // 添加登录检查
+    if (!getApp().checkLogin("touxiang")) return;
+    
     this.syncUserInfo();
     this.getUserBalance();
     this.updateGradient();

@@ -6,6 +6,9 @@ Page({
     containerStyle: '', // 容器样式（CSS 变量）
   },
   onLoad: function() {
+    // 添加登录检查
+    if (!getApp().checkLogin("balance")) return;
+    
     console.log('余额页面加载');
     console.log('页面加载完成');
     this.getUserBalance();
