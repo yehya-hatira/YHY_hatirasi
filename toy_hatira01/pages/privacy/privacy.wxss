@@ -1,0 +1,43 @@
+page {
+  height: 100vh;
+  background: linear-gradient(180deg, #673ab7 0%, #9c27b0 100%);
+}
+
+.container {
+  padding: 20rpx;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.content-area {
+  background: white;
+  border-radius: 16rpx;
+  padding: 40rpx;
+  margin-top: 20rpx;
+  max-height: calc(100vh - 100rpx);
+  overflow-y: auto;
+}
+
+.content-area rich-text {
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: #333;
+}
+
+.content-area h1 {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+  color: #673ab7;
+}
+
+.content-area h2 {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin: 25rpx 0 15rpx 0;
+  color: #9c27b0;
+}
+
+.content-area p {
+  margin: 15rpx 0;
+}

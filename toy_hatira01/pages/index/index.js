@@ -975,6 +975,42 @@ Page({
     });
   },
 
+  // 示例：在发送礼物时进行内容安全检查
+  sendGift(giftName, receiver) {
+    const app = getApp();
+    
+    // 检查接收者昵称是否安全（模拟）
+    const safetyCheck = app.checkContentSafety(receiver);
+    if (!safetyCheck.safe) {
+      wx.showToast({
+        title: '接收者信息包含敏感内容',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 实际礼物发送逻辑...
+    console.log('发送礼物:', giftName, '给:', receiver);
+  },
+
+  // 示例：在点赞时进行内容安全检查
+  likeImage(imageIndex, owner) {
+    const app = getApp();
+    
+    // 检查图片所有者昵称是否安全
+    const safetyCheck = app.checkContentSafety(owner);
+    if (!safetyCheck.safe) {
+      wx.showToast({
+        title: '用户信息包含敏感内容',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    // 实际点赞逻辑...
+    console.log('点赞图片:', imageIndex, '所有者:', owner);
+  },
+
   // 修改 showFuncKeysSequentially 函数以实现依次弹出和弹回的效果
   showFuncKeysSequentially: function () {
     const keys = this.data.funcKeys;

@@ -150,13 +150,24 @@ Page({
     });
   },
 
+  // 隐私政策处理
+  handlePrivacyPolicy() {
+    wx.navigateTo({ url: '/pages/privacy/privacy' });
+  },
+
   // 关于应用处理
   handleAboutApp() {
     wx.showModal({
       title: '关于瞎记 (Hatira)',
-      content: '版本: v1.0.0\n\n瞎记是一款社交记忆分享平台，支持图片、音乐、礼物赠送和消息通知功能。\n\n© 2026 瞎记团队',
-      showCancel: false,
-      confirmText: '确定'
+      content: '版本: v1.0.0\n\n瞎记是一款社交记忆分享平台，支持图片、音乐、礼物赠送和消息通知功能。\n\n© 2026 瞎记团队\n\n[隐私政策](点击确定后可在设置中查看)',
+      showCancel: true,
+      confirmText: '确定',
+      cancelText: '隐私政策',
+      success: (res) => {
+        if (res.cancel) {
+          wx.navigateTo({ url: '/pages/privacy/privacy' });
+        }
+      }
     });
   },
 

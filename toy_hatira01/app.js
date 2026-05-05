@@ -16,6 +16,33 @@ App({
   // 登录有效期：10分钟（ms）
   LOGIN_EXPIRE_MS: 3 * 60 * 1000,
 
+  // 基础敏感词列表（实际项目应使用后端API）
+  sensitiveWords: [
+    '敏感词1', '敏感词2', '违规内容', '违法信息'
+  ],
+
+  // 简单的内容安全检查（前端模拟）
+  checkContentSafety(content) {
+    if (!content || typeof content !== 'string') {
+      return { safe: true, reason: '' };
+    }
+    
+    const lowerContent = content.toLowerCase();
+    for (const word of this.sensitiveWords) {
+      if (lowerContent.includes(word.toLowerCase())) {
+        return { safe: false, reason: '包含敏感内容' };
+      }
+    }
+    return { safe: true, reason: '' };
+  },
+
+  // 图片安全检查（前端模拟）
+  checkImageSafety(imagePath) {
+    // 实际项目应调用腾讯云内容安全API
+    // 这里仅做模拟，返回安全
+    return { safe: true, reason: '' };
+  },
+
   logout() {
     this.globalData.isLoggedIn = false;
     this.globalData.userInfo = {

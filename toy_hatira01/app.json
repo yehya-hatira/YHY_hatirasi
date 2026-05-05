@@ -7,7 +7,8 @@
     "pages/touxiang/touxiang",
     "pages/settings/settings",
     "pages/Record/Record",
-    "pages/Historical-record/hist-record"
+    "pages/Historical-record/hist-record",
+    "pages/privacy/privacy"
   ],
   "window": {
     "backgroundTextStyle": "light",

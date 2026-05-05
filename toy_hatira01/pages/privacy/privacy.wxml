@@ -1,0 +1,5 @@
+<view class="container" style="{{containerStyle}}">
+  <view class="content-area">
+    <rich-text nodes="{{privacyContent}}"></rich-text>
+  </view>
+</view>
