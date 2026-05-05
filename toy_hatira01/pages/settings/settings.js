@@ -3,21 +3,20 @@ Page({
     accountSettings: [
       {title: '我要记录', event: 'navigateToRecord'},
       {title: '历史记录', event: 'navigateToEditProfile'},
-      {title: '绑定手机号', value: '188****1234', event: 'changePhone'},
+      {title: '绑定手机号', value: '未绑定', event: 'changePhone'},
       {title: '账号注销', event: 'changePassword'},
-      {title: '退出登录', event: 'logout'} // 添加退出登录选项
+      {title: '退出登录', event: 'logout'}
     ],
-    notifySettings: [
-      {title: '礼物通知', type: 'gift', enabled: true},
-      {title: '余额变动提醒', type: 'balance', enabled: true}
-    ],
+    notifySettings: [],
     containerStyle: '',
+    appVersion: 'v1.0.0'
   },
 
   onLoad() {
     // 添加登录检查
     if (!getApp().checkLogin("settings")) return;
     
+    this.loadNotifySettings(); // 加载通知设置
     this.loadUserInfo();
     this.getUserBalance();
     this.updateGradient();
@@ -33,7 +32,35 @@ Page({
   loadUserInfo() {
     const app = getApp();
     if (app.globalData.userInfo) {
-      this.setData({ userInfo: app.globalData.userInfo });
+      // 更新绑定手机号显示
+      const phoneValue = app.globalData.userInfo.phone ? 
+        app.globalData.userInfo.displayPhone : '未绑定';
+      const updatedAccountSettings = this.data.accountSettings.map(item => {
+        if (item.title === '绑定手机号') {
+          return {...item, value: phoneValue};
+        }
+        return item;
+      });
+      this.setData({ 
+        userInfo: app.globalData.userInfo,
+        accountSettings: updatedAccountSettings
+      });
+    }
+  },
+
+  // 加载通知设置（从本地存储）
+  loadNotifySettings() {
+    const savedNotifySettings = wx.getStorageSync('notifySettings');
+    if (savedNotifySettings && Array.isArray(savedNotifySettings)) {
+      this.setData({ notifySettings: savedNotifySettings });
+    } else {
+      // 默认设置
+      const defaultSettings = [
+        {title: '礼物通知', type: 'gift', enabled: true},
+        {title: '余额变动提醒', type: 'balance', enabled: true}
+      ];
+      this.setData({ notifySettings: defaultSettings });
+      wx.setStorageSync('notifySettings', defaultSettings);
     }
   },
 
@@ -88,7 +115,7 @@ Page({
         wx.navigateTo({ url: '/pages/Historical-record/hist-record' });
         break;
       case 'changePhone':
-        wx.showToast({ title: '绑定手机号功能待开发', icon: 'none' });
+        this.handleBindPhone();
         break;
       case 'changePassword':
         wx.showModal({
@@ -110,6 +137,29 @@ Page({
     }
   },
 
+  // 绑定手机号处理
+  handleBindPhone() {
+    const app = getApp();
+    if (app.globalData.userInfo.phone) {
+      wx.showToast({ title: '手机号已绑定', icon: 'none' });
+      return;
+    }
+    
+    wx.navigateTo({
+      url: '/pages/login/login?from=settings'
+    });
+  },
+
+  // 关于应用处理
+  handleAboutApp() {
+    wx.showModal({
+      title: '关于瞎记 (Hatira)',
+      content: '版本: v1.0.0\n\n瞎记是一款社交记忆分享平台，支持图片、音乐、礼物赠送和消息通知功能。\n\n© 2026 瞎记团队',
+      showCancel: false,
+      confirmText: '确定'
+    });
+  },
+
   // 退出登录处理
   handleLogout() {
     wx.showModal({
@@ -124,50 +174,21 @@ Page({
     });
   },
 
+  // 切换通知设置
   toggleNotify(e) {
     const type = e.currentTarget.dataset.type;
     const settings = this.data.notifySettings.map(item => {
-      if (item.type === type) item.enabled = !item.enabled;
+      if (item.type === type) {
+        item.enabled = !item.enabled;
+      }
       return item;
     });
     this.setData({ notifySettings: settings });
+    
+    // 保存到本地存储
+    wx.setStorageSync('notifySettings', settings);
+    
     wx.showToast({ title: '设置已更新' });
-  },
-
-  showLogoutConfirm() {
-    wx.showModal({
-      title: '确认退出',
-      content: '确定要退出当前账号吗？',
-      success: res => {
-        if (res.confirm) {
-          getApp().logout();
-          wx.navigateBack();
-        }
-      }
-    });
-  },
-
-  // 显示选项
-  showOptions() {
-    wx.showActionSheet({
-      itemList: ['拍照', '从手机相册选择', '保持图片', '取消'],
-      success: (res) => {
-        if (res.tapIndex === 0) {
-          // 拍照逻辑
-        } else if (res.tapIndex === 1) {
-          // 从相册选择逻辑
-        } else if (res.tapIndex === 2) {
-          // 保持图片逻辑
-        }
-      },
-      fail: (err) => {
-        if (err.errMsg.includes('cancel')) {
-          wx.showToast({ title: '操作已取消', icon: 'none' });
-        } else {
-          console.error(err);
-        }
-      }
-    });
   },
 
   // 获取用户余额（从全局读取）

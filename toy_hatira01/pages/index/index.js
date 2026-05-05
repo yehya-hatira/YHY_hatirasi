@@ -151,7 +151,7 @@ Page({
     rightGiftVisible: true, // 控制右侧礼物区的显示
     isGifting: false, // 控制动画状态
 
-    currentReceiver: 'zulmira', // 当前接收者
+    currentReceiver: '小Yeheya', // 当前接收者
     likedImages: [], // 记录被点赞的图片索引数组
     isCurrentImageLiked: false // 当前图片是否被点赞
   },
