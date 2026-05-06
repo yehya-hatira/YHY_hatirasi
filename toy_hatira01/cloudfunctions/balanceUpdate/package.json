@@ -1,0 +1,9 @@
+{
+  "name": "balanceUpdate",
+  "version": "1.0.0",
+  "description": "Balance update cloud function for Hatira",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

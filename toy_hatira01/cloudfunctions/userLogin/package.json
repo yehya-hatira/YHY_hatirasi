@@ -1,0 +1,9 @@
+{
+  "name": "userLogin",
+  "version": "1.0.0",
+  "description": "User login/register cloud function for Hatira",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

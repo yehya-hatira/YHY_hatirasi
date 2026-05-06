@@ -1,3 +1,4 @@
+var balanceUtils = require('../../utils/balance.js');
 Page({
   data: {
     containerStyle: '',
@@ -67,19 +68,10 @@ Page({
   },
 
   getUserBalance: function() {
-    const app = getApp();
-    const savedBalance = wx.getStorageSync('userBalance');
-    if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
-      app.globalData.userBalance = savedBalance;
-    }
+    balanceUtils.getUserBalance();
   },
 
   updateGradient: function() {
-    const app = getApp();
-    const balance = app.globalData.userBalance;
-    const percent = 95 - (balance / 1000) * 85;
-    this.setData({
-      containerStyle: `--stop-position: ${percent}%`
-    });
+    balanceUtils.updateGradient(this);
   }
 });

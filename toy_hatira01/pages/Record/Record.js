@@ -1,4 +1,5 @@
 // pages/Record/Record.js
+var balanceUtils = require('../../utils/balance.js');
 Page({
   data: {
     // 页面初始化数据
@@ -307,7 +308,9 @@ Page({
       this.prevBImage(); // 上一张图片
     } else if (key === 'add') {
       this.chooseBImage(); // 通过 add-key-circle 上传图片
-    }else if (key === 'func') {
+    } else if (key === 'dele') {
+      this.deleteCurrentImage();
+    } else if (key === 'func') {
               if (this.data.showFuncKeys) {
                   // 如果已经显示，依次收回每个键
                   this.hideFuncKeysSequentially();
@@ -619,23 +622,41 @@ Page({
     }
   },
 
+  // 删除当前图片
+  deleteCurrentImage: function() {
+    const that = this;
+    const lang = this.data.currentLang;
+    const i18n = this.data.i18n[lang];
+    wx.showModal({
+      title: i18n.confirmDelete,
+      content: i18n.delete,
+      success: function(res) {
+        if (res.confirm) {
+          const bImages = [...that.data.bImages];
+          const currentBIndex = that.data.currentBIndex;
+          if (bImages.length === 0) return;
+          bImages.splice(currentBIndex, 1);
+          const newIndex = bImages.length === 0 ? 0 : currentBIndex % bImages.length;
+          that.setData({
+            bImages: bImages,
+            currentBIndex: newIndex,
+            showAddBImage: bImages.length === 0
+          });
+          wx.vibrateShort({ type: 'medium' });
+          wx.showToast({ title: i18n.success, icon: 'success', duration: 1000 });
+        }
+      }
+    });
+  },
+
   // 获取用户余额（从全局读取）
   getUserBalance: function() {
-    const app = getApp();
-    const savedBalance = wx.getStorageSync('userBalance');
-    if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
-      app.globalData.userBalance = savedBalance;
-    }
+    balanceUtils.getUserBalance();
   },
 
   // 更新渐变背景
   updateGradient: function() {
-    const app = getApp();
-    const balance = app.globalData.userBalance;
-    const percent = 95 - (balance / 1000) * 85;
-    this.setData({
-      containerStyle: `--stop-position: ${percent}%`
-    });
+    balanceUtils.updateGradient(this);
   },
 
   // 添加onShow生命周期函数，检查登录状态

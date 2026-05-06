@@ -1,8 +1,25 @@
 <!--pages/Historical-record/hist-record.wxml-->
 <view class="container" style="{{containerStyle}}">
-  <view class="empty-state">
+  <view class="empty-state" wx:if="{{records.length === 0 && !loading}}">
     <view class="empty-icon">⌛</view>
     <text class="empty-title">历史记录暂时为空</text>
     <text class="empty-subtitle">当你有更多礼物记录时，会展示在这里</text>
   </view>
+
+  <scroll-view class="records-list" scroll-y wx:if="{{records.length > 0}}">
+    <block wx:for="{{records}}" wx:key="index">
+      <view class="record-item">
+        <view class="record-icon">
+          <text wx:if="{{item.category === 'balance' && item.type === 'recharge'}}">💰</text>
+          <text wx:elif="{{item.category === 'balance' && item.type === 'consume'}}">💸</text>
+          <text wx:else>🎁</text>
+        </view>
+        <view class="record-info">
+          <text class="record-desc" wx:if="{{item.category === 'balance'}}">{{item.remark}}{{item.amount > 0 ? '+' : ''}}{{item.amount}}币 (余额: {{item.balanceAfter}})</text>
+          <text class="record-desc" wx:else>{{item.sender}} 送给 {{item.receiver}} {{item.giftName}}</text>
+          <text class="record-time">{{item.displayTime}}</text>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
 </view>

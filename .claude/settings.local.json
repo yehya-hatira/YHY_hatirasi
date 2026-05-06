@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"try { require\\('fs'\\).readFileSync\\('d:/hatiraProject/YHY_hatirasi/toy_hatira01/pages/settings/settings.js', 'utf8'\\); console.log\\('Syntax: file readable'\\); } catch\\(e\\) { console.log\\('Error:', e.message\\); }\")",
+      "Bash(node -e 'try { require\\('\\\\''fs'\\\\''\\).readFileSync\\('\\\\''__TRACKED_VAR__'\\\\'', '\\\\''utf8'\\\\''\\); console.log\\('\\\\''OK'\\\\''\\); } catch\\(e\\) { console.log\\('\\\\''ERROR: '\\\\'' + e.message\\); }')",
+      "Bash(node --check utils/data-service.js)",
+      "Bash(node --check utils/balance.js)",
+      "Bash(node --check pages/login/login.js)",
+      "Bash(node --check pages/Balance/balance.js)",
+      "Bash(node --check pages/message/message.js)",
+      "Bash(node --check cloudfunctions/userLogin/index.js)",
+      "Bash(node --check cloudfunctions/balanceUpdate/index.js)",
+      "Bash(node --check cloudfunctions/syncData/index.js)",
+      "Bash(node -e \"var ds = require\\('./utils/data-service.js'\\); var bu = require\\('./utils/balance.js'\\); console.log\\('data-service exports:', Object.keys\\(ds\\).join\\(', '\\)\\); console.log\\('balance exports:', Object.keys\\(bu\\).join\\(', '\\)\\);\")",
+      "Bash(node --check \"d:\\\\hatiraProject\\\\YHY_hatirasi\\\\toy_hatira01\\\\pages\\\\index\\\\index.js\")",
+      "Bash(node --check \"d:\\\\hatiraProject\\\\YHY_hatirasi\\\\toy_hatira01\\\\utils\\\\data-service.js\")",
+      "Bash(node --check \"d:\\\\hatiraProject\\\\YHY_hatirasi\\\\toy_hatira01\\\\pages\\\\message\\\\message.js\")"
+    ]
+  }
+}

@@ -84,6 +84,13 @@ App({
 
   onLaunch() {
     console.log('小程序启动');
+    // 云开发初始化（需要替换为你的云环境ID）
+    if (wx.cloud) {
+      wx.cloud.init({
+        env: '',
+        traceUser: true
+      });
+    }
     this.loadStorageData();
   },
 

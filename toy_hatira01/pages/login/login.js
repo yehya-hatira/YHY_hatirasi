@@ -1,4 +1,5 @@
 // pages/login/login.js
+var balanceUtils = require('../../utils/balance.js');
 Page({
   data: {
     containerStyle: '',
@@ -114,33 +115,25 @@ Page({
   // 完成登录，写入全局状态
   // 获取用户余额
   getUserBalance() {
-    const app = getApp();
-    const savedBalance = wx.getStorageSync('userBalance');
-    if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
-      app.globalData.userBalance = savedBalance;
-    }
+    balanceUtils.getUserBalance();
   },
 
   // 更新渐变背景（与余额关联）
   updateGradient() {
-    const app = getApp();
-    const balance = app.globalData.userBalance;
-    const percent = 95 - (balance / 1000) * 85;
-    this.setData({
-      containerStyle: '--stop-position: ' + percent + '%'
-    });
+    balanceUtils.updateGradient(this);
   },
 
   _completeLogin(nickname, phone) {
-    const app = getApp();
-    const existingUid = wx.getStorageSync('userUid') || ('uid_' + Date.now());
-    const existingAvatar = wx.getStorageSync('userAvatar') || '/Img/images/hui_touxiang.png';
-    const existingNickname = wx.getStorageSync('userNickname') || nickname;
-    const displayPhone = phone
+    var app = getApp();
+    var dataService = require('../../utils/data-service.js');
+    var existingUid = wx.getStorageSync('userUid') || ('uid_' + Date.now());
+    var existingAvatar = wx.getStorageSync('userAvatar') || '/Img/images/hui_touxiang.png';
+    var existingNickname = wx.getStorageSync('userNickname') || nickname;
+    var displayPhone = phone
       ? phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
       : '';
 
-    const userInfo = {
+    var userInfo = {
       avatar: existingAvatar,
       nickname: existingNickname,
       uid: existingUid,
@@ -152,30 +145,33 @@ Page({
     app.globalData.userInfo = userInfo;
     app.globalData.isLoggedIn = true;
     wx.setStorageSync('isLoggedIn', true);
-    wx.setStorageSync('loginTime', Date.now()); // 记录登录时间，10分钟失效
+    wx.setStorageSync('loginTime', Date.now());
     wx.setStorageSync('userInfo', userInfo);
     wx.setStorageSync('userUid', existingUid);
     if (phone) wx.setStorageSync('userPhone', phone);
 
     // 首次登录赠送余额
-    const savedBalance = wx.getStorageSync('userBalance');
+    var savedBalance = wx.getStorageSync('userBalance');
     if (typeof savedBalance !== 'number' || isNaN(savedBalance)) {
       wx.setStorageSync('userBalance', 500);
       app.globalData.userBalance = 500;
     }
 
+    // 同步用户资料到云/本地
+    dataService.saveUserProfile(existingUid, userInfo);
+
     this.setData({ isLoggingIn: false });
     wx.vibrateShort({ type: 'medium' });
     wx.showToast({ title: '登录成功', icon: 'success', duration: 1200 });
 
-    setTimeout(() => {
-      const from = this.data.fromPage;
+    setTimeout(function() {
+      var from = this.data.fromPage;
       if (from) {
         wx.navigateBack({ delta: 1 });
       } else {
         wx.reLaunch({ url: '/pages/index/index' });
       }
-    }, 1200);
+    }.bind(this), 1200);
   }
 });
 

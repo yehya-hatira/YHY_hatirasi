@@ -1,4 +1,6 @@
 // d:\Project_Tools\Tencent\1hunji\new02\pages\index\index.js
+var dataService = require('../../utils/data-service.js');
+var balanceUtils = require('../../utils/balance.js');
 Page({
   data: {
     // 页面初始化数据
@@ -21,6 +23,7 @@ Page({
     myKeys: ['myMsg', 'myBalance', 'mysetting'], // 定义要显示的键
     myMsgBadge: 0, // 绑定到 myMsg 的未读数
     myBalanceBadge: 0, // 新增余额提醒
+    userBalance: 0, // 当前余额（用于页面显示和校验）
     showLanguageList: false,
     currentLang: 'zh', // 默认语言
     musicText: '',
@@ -503,15 +506,9 @@ Page({
   },
 
 
-  // 获取用户余额（从全局读取，不在页面 data 中存储）
+  // 获取用户余额（同步到页面 data 中用于余额校验）
   getUserBalance: function() {
-    console.log('获取用户余额...');
-    const app = getApp();
-    const savedBalance = wx.getStorageSync('userBalance');
-    if (typeof savedBalance === 'number' && !isNaN(savedBalance)) {
-      app.globalData.userBalance = savedBalance;
-    }
-    console.log('当前用户余额:', app.globalData.userBalance);
+    balanceUtils.getUserBalance(this);
   },
 
   // 获取礼物记录
@@ -758,16 +755,17 @@ Page({
         // 直接使用本地时间（不再调整时区偏移）
         const now = new Date();
         const notification = {
+            type: 'gift',
             sender: 'Yeheya',
             receiver: _this.data.currentReceiver,
             giftName: gift.name,
-            timestamp: now.toISOString() // 直接使用本地时间的ISO字符串
+            timestamp: now.toISOString()
         };
 
-        // 存入全局队列
+        // 存入全局队列 + 同步通知到云端
         const app = getApp();
-        app.globalData.notifications.push(notification);
-        app.globalData.unreadMsgCount += 1;
+        var uid = app.globalData.userInfo ? app.globalData.userInfo.uid : '000000001';
+        dataService.saveNotification(uid, notification);
 
         // 更新页面显示的未读红点和余额红点
         _this.setData({ 
@@ -818,47 +816,47 @@ Page({
     }, 500);
   },
 
-  // 更新用户余额（只更新全局数据和本地存储）
+  // 更新用户余额（仅更新本地，流水在 addBalanceRecord 中记录）
   updateUserBalance: function(amount) {
-    const app = getApp();
-    const newBalance = app.globalData.userBalance + amount;
+    var app = getApp();
+    var newBalance = app.globalData.userBalance + amount;
     app.globalData.userBalance = newBalance;
     wx.setStorageSync('userBalance', newBalance);
+    this.setData({ userBalance: newBalance });
     console.log('更新后用户余额:', newBalance);
   },
 
-  // 记录余额流水（消费）
+  // 记录余额流水（消费/充值）
   addBalanceRecord: function(type, amount, remark) {
-    const app = getApp();
-    const now = new Date();
-    const record = {
-      type, // 'recharge' | 'consume'
-      amount,
+    var app = getApp();
+    var uid = app.globalData.userInfo ? app.globalData.userInfo.uid : '000000001';
+    var record = {
+      type: type,
+      amount: amount,
       balanceAfter: app.globalData.userBalance,
-      remark: remark || '',
-      timestamp: now.toISOString()
+      remark: remark || ''
     };
-
-    const existing = wx.getStorageSync('balanceRecords') || [];
-    const updated = [...existing, record];
-    wx.setStorageSync('balanceRecords', updated);
-    app.globalData.balanceRecords = updated;
+    dataService.saveBalanceRecord(uid, record);
   },
 
   // 添加礼物记录
   addGiftRecord: function(gift) {
-    const newRecord = {
+    var app = getApp();
+    var uid = app.globalData.userInfo ? app.globalData.userInfo.uid : '000000001';
+    var newRecord = {
       id: this.data.giftRecords.length + 1,
-      sender: 'yehya', // 当前发送者
-      receiver: this.data.currentReceiver, // 当前接收者
+      senderName: 'yehya',
+      receiverName: this.data.currentReceiver,
       giftName: gift.name,
-      quantity: 1,
-      timestamp: new Date().toLocaleTimeString()
+      giftImage: gift.image || '',
+      price: gift.price || 0,
+      timestamp: new Date().toISOString()
     };
-    const updatedRecords = [...this.data.giftRecords, newRecord];
+    var updatedRecords = this.data.giftRecords.concat([newRecord]);
     this.setData({ giftRecords: updatedRecords });
     wx.setStorageSync('giftRecords', updatedRecords);
-    console.log('添加礼物记录:', newRecord); // 打印添加的礼物记录
+    dataService.saveGiftRecord(uid, newRecord);
+    console.log('添加礼物记录:', newRecord);
   },
 
   // 播放礼物动画
@@ -1561,11 +1559,6 @@ Page({
 
   // 更新渐变背景
   updateGradient: function() {
-    const app = getApp();
-    const balance = app.globalData.userBalance;
-    const percent = 95 - (balance / 1000) * 85;
-    this.setData({
-      containerStyle: `--stop-position: ${percent}%`
-    });
+    balanceUtils.updateGradient(this);
   }
 });

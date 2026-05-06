@@ -3,7 +3,7 @@
   <!-- 语言选择框 -->
   <view class="language-selector">
     <view class="language-box" bindtap="toggleLanguageList">
-      <text>langu</text>
+      <text>{{i18n[currentLang].language}}</text>
       <view class="triangle"></view>
     </view>
     <view class="language-list" wx:if="{{showLanguageList}}">
